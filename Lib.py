@@ -12,6 +12,91 @@ from torch_geometric.nn import GATConv, GCNConv, GraphConv, global_mean_pool
 from torch_geometric.datasets import Planetoid
 import collections
 
+def plot_save(acc_m, acc_one, save_name, name_label, total_epoch, print_it, total_runs, nTasks):
+    import numpy as np
+    np.savetxt(save_name+name_label+'_acc_runs_task.csv', acc_one)
+    np.savetxt(save_name+name_label+'_acc_runs_memory.csv', acc_m)
+    mean_m=np.mean(acc_m, axis=0)
+    yerr_m=np.std(acc_m, axis=0)
+    mean_t=np.mean(acc_one, axis=0)
+    yerr_t=np.std(acc_one, axis=0)
+    x_lab=np.arange(mean_m.shape[0])
+    print(mean_m.shape, yerr_m.shape)
+    n_e_task=(total_epoch//print_it)
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import matplotlib.ticker as ticker
+    from matplotlib.lines import Line2D
+    import seaborn as sns
+    import matplotlib.font_manager as font_manager
+    import itertools as iters
+    from scipy.ndimage import gaussian_filter
+    large = 14; med = 12; small = 9
+    def cm2inch(value):
+        return value/2.54
+    plt.style.use('seaborn-white')
+    COLOR = 'black'
+    params = {'axes.titlesize': large,
+              'legend.fontsize': med,
+              'figure.figsize': (cm2inch(16),cm2inch(18)),
+              'axes.labelsize': med,
+              'axes.titlesize': small,
+              'xtick.labelsize': med,
+              'ytick.labelsize': med,
+              'figure.titlesize': small, 
+              'font.family': "sans-serif",
+              'font.sans-serif': "Myriad Hebrew",
+                'text.color' : 'black',
+                'axes.labelcolor' : COLOR,
+                'axes.linewidth' : 0.3,
+                'xtick.color' : 'black',
+                'ytick.color' : 'black'}
+    plt.rcParams.update(params)
+    plt.rc('text', usetex = False)
+    color =['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b',\
+            '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    plt.rcParams['mathtext.fontset'] = 'cm'
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots( 2,1, dpi = 1200 )
+    palette = sns.color_palette("Greys", nTasks*10)
+    color_idx = iters.cycle(palette)
+    for i in range(nTasks):
+        ax[0].add_patch( matplotlib.patches.Rectangle((i*n_e_task-1,0), n_e_task, 1.2, color=next(color_idx)) )
+    palette = sns.color_palette("Greys", nTasks*10)
+    color_idx = iters.cycle(palette)
+    for i in range(nTasks):
+        ax[1].add_patch( matplotlib.patches.Rectangle((i*n_e_task-1,0), n_e_task, 1.2, color=next(color_idx)) )
+
+    palette = sns.color_palette("Set1", nTasks)
+    color_idx = iters.cycle(palette)
+    ## PLOT THINGS ABOUT THE memory
+    curve=mean_m
+    err=yerr_m
+    fill_up = curve+err
+    fill_down = curve-err
+    ax[0].fill_between(x_lab, fill_up, fill_down, alpha=0.5, color=next(color_idx))
+    ax[0].legend(loc='upper right')
+
+    ## PLOT THINGS ABOUT THE task
+    curve=mean_t
+    err=yerr_t
+    fill_up = curve+err
+    fill_down = curve-err
+    ax[1].fill_between(x_lab, fill_up, fill_down, alpha=0.5, color=next(color_idx))
+
+    ax[1].legend(loc='upper right')
+    ax[1].set_ylabel('Accuracy (Task)')
+    ax[1].set_xlabel('Epochs $k$')
+    ax[1].grid(True)
+    ax[0].grid(True)
+    ax[0].set_ylabel('Accuracy (Mem)')
+    ax[0].set_xlabel('Epochs $k$')
+    ax[0].set_ylim([0.6, 1])
+    ax[1].set_ylim([0.6, 1])
+    ax[0].set_xlim([0, ((total_epoch//print_it-1)*nTasks) ])
+    ax[1].set_xlim([0, ((total_epoch//print_it-1)*nTasks) ])
+    fig.tight_layout()
+    plt.savefig(save_name+name_label+'_.png', dpi=300)
 
 def train_CL(model, criterion, optimizer, mem_loader, train_loader, task, graph = 0, node = 1, \
             params = {'x_updates': 1,  'theta_updates':1, 'factor': 0.0001, 'x_lr': 0.0001,'th_lr':0.0001,\
@@ -270,9 +355,9 @@ def continuum_node_classification( datas, n_Tasks, num_classes):
     return tasks
                 
             
-def test_NC(model, x, edge, mask, y):
+def test_NC(model, x, edge, mask, y, d="cuda"):
       model.eval()
-      out = model(x, edge)
+      out = model(x.to(d), edge.to(d))
       pred = out.argmax(dim=1)  # Use the class with highest probability.
       test_correct = pred[mask] == y[mask]  # Check against ground-truth labels.
       print(int(test_correct.sum()), int(mask.sum()))
@@ -321,7 +406,7 @@ def load_data(data_label):
     import torch    
     if data_label == 'MUTAG' or data_label == 'ENZYMES' or data_label=='PROTEINS':
         from torch_geometric.datasets import TUDataset
-        dataset = TUDataset(root='data/TUDataset', name=data_label)
+        dataset = TUDataset(root='data/TUDataset', name=data_label).shuffle()
         print()
         print(f'Dataset: {dataset}:')
         print('====================')
@@ -331,7 +416,7 @@ def load_data(data_label):
         return dataset
     elif data_label=='MNIST':
         from torch_geometric.datasets import GNNBenchmarkDataset
-        dataset = GNNBenchmarkDataset(root='data/GNNBench', name='MNIST')
+        dataset = GNNBenchmarkDataset(root='data/GNNBench', name='MNIST').shuffle()
         print()
         print(f'Dataset: {dataset}:')
         print('====================')
@@ -344,7 +429,7 @@ def load_data(data_label):
         from torch_geometric.datasets import Planetoid
         from torch_geometric.transforms import NormalizeFeatures
 
-        dataset = Planetoid(root='data/Planetoid', name=data_label)
+        dataset = Planetoid(root='data/Planetoid', name=data_label).shuffle()
         data= dataset[0]
         print("from the load dataset", data.x)
         print(f'Dataset: {dataset}:')
