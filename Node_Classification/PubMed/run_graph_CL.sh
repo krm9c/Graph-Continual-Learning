@@ -2,9 +2,6 @@
 ##!/bin/bash
 
 # This is the model without any noise summary
-
-
-
 # The theta implementations
 # export http_proxy=http://proxy.tmi.alcf.anl.gov:3128
 # export https_proxy=http://proxy.tmi.alcf.anl.gov:3128
@@ -26,17 +23,10 @@
 # conda activate torchRL
 
 
-
 ## The JLSE implementations
-## mkdir one_peak_test
-# python uq_v.py 
-## --peak "one_peak"  --n_points 450000 --json_file "One_peak.json"  --output_model "one_peak_test/"  --input_flag 1  --output_flag 1 --factor_reset 10 --n_iterations  20
-# source deactivate
 
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate dh_posei
-# mkdir one_peak_test
-python torch_aicdi_complete.py 
-#--peak "one_peak"  --n_points 450000 --json_file "One_peak.json"  --output_model "one_peak_test/"  --input_flag 1  --output_flag 1 --factor_reset 10 --n_iterations  20
+python multi_run.py
 conda deactivate
 
