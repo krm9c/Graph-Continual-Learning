@@ -1,50 +1,36 @@
-import ray
-import json
-from functools import partial
 import torch
 from torch.utils.data import DataLoader
 from torch_geometric.loader import DataLoader
-from torch.nn import Linear
-
 from torch_geometric.data import Data
-import torch.nn.functional as F
-from torch_geometric.nn import GATConv, GCNConv, GraphConv, global_mean_pool
-from torch_geometric.datasets import Planetoid
-import collections
 import higher
+import numpy as np
+from sklearn.metrics import f1_score
+import copy
+from torch.profiler import profile, record_function, ProfilerActivity
+import random
 
-def _f1_node(model, x, edge, y, mask, d='cuda'):
-    # print("1 In the accuracy calculateion")
-    out = model(x.to(d), edge.to(d))
-    pred=torch.argmax(out,1)
-    from sklearn.metrics import f1_score
-    f1_ = f1_score(y[mask].cpu().detach().numpy(), \
-        pred[mask].cpu().detach().numpy(),average='micro' )
-    # print("3 Out In the F1 calculation")
-    return f1_
+# Set some macros for reproducibility
+torch.backends.cudnn.benchmark = True
+torch.backends.cudnn.enabled = True
+torch.manual_seed(0)
+random.seed(0)
+np.random.seed(0)
 
 def plot_save(acc_m, acc_one, save_name, name_label, total_epoch, print_it, total_runs, nTasks):
-    import numpy as np
     np.savetxt(save_name+name_label+'_acc_runs_task.csv', acc_one)
     np.savetxt(save_name+name_label+'_acc_runs_memory.csv', acc_m)
     mean_m=np.mean(acc_m, axis=0)
     yerr_m=np.std(acc_m, axis=0)
     mean_t=np.mean(acc_one, axis=0)
     yerr_t=np.std(acc_one, axis=0)
-    x_lab=np.arange(mean_m.shape[0])*(print_it)
-
-
-    print(mean_m.shape, yerr_m.shape)
+    x_lab=np.arange(mean_m.shape[0])
+    # print(mean_m.shape, yerr_m.shape)
     n_e_task=(total_epoch//print_it)
     import matplotlib
     import matplotlib.pyplot as plt
-    import matplotlib.ticker as ticker
-    from matplotlib.lines import Line2D
     import seaborn as sns
-    import matplotlib.font_manager as font_manager
     import itertools as iters
-    from scipy.ndimage import gaussian_filter
-    large = 14; med = 12; small = 9
+    large = 20; med = 18; small = 16
     def cm2inch(value):
         return value/2.54
     plt.style.use('seaborn-white')
@@ -57,8 +43,6 @@ def plot_save(acc_m, acc_one, save_name, name_label, total_epoch, print_it, tota
               'xtick.labelsize': med,
               'ytick.labelsize': med,
               'figure.titlesize': small, 
-              'font.family': "sans-serif",
-              'font.sans-serif': "Myriad Hebrew",
                 'text.color' : 'black',
                 'axes.labelcolor' : COLOR,
                 'axes.linewidth' : 0.3,
@@ -69,7 +53,6 @@ def plot_save(acc_m, acc_one, save_name, name_label, total_epoch, print_it, tota
     color =['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b',\
             '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
     plt.rcParams['mathtext.fontset'] = 'cm'
-    import matplotlib.pyplot as plt
     fig, ax = plt.subplots( 2,1, dpi = 1200 )
     palette = sns.color_palette("Greys", nTasks*10)
     color_idx = iters.cycle(palette)
@@ -79,7 +62,6 @@ def plot_save(acc_m, acc_one, save_name, name_label, total_epoch, print_it, tota
     color_idx = iters.cycle(palette)
     for i in range(nTasks):
         ax[1].add_patch( matplotlib.patches.Rectangle((i*n_e_task-1,0), n_e_task, 1.2, color=next(color_idx)) )
-
     palette = sns.color_palette("Set1", nTasks)
     color_idx = iters.cycle(palette)
     ## PLOT THINGS ABOUT THE memory
@@ -88,28 +70,28 @@ def plot_save(acc_m, acc_one, save_name, name_label, total_epoch, print_it, tota
     fill_up = curve+err
     fill_down = curve-err
     ax[0].fill_between(x_lab, fill_up, fill_down, alpha=0.5, color=next(color_idx))
-    ax[0].legend(loc='upper right')
-
+    # ax[0].legend(loc='upper right')
     ## PLOT THINGS ABOUT THE task
     curve=mean_t
     err=yerr_t
     fill_up = curve+err
     fill_down = curve-err
     ax[1].fill_between(x_lab, fill_up, fill_down, alpha=0.5, color=next(color_idx))
-
-    ax[1].legend(loc='upper right')
+    # ax[1].legend(loc='upper right')
     ax[1].set_ylabel('Accuracy (Task)')
-    ax[1].set_xlabel('Epochs $k$')
+    ax[1].set_xlabel('Tasks $k$')
     ax[1].grid(True)
     ax[0].grid(True)
     ax[0].set_ylabel('Accuracy (Mem)')
-    ax[0].set_xlabel('Epochs $k$')
+    ax[0].set_xlabel('Tasks $k$')
     # ax[0].set_ylim([0.6, 1])
     # ax[1].set_ylim([0.6, 1])
-    ax[0].set_xlim([0, ((total_epoch//print_it-1)*nTasks) ])
-    ax[1].set_xlim([0, ((total_epoch//print_it-1)*nTasks) ])
+    ax[0].set_xlim([0, nTasks])
+    ax[1].set_xlim([0, nTasks])
     fig.tight_layout()
     plt.savefig(save_name+name_label+'_.png', dpi=300)
+    plt.close()
+
 
 def normalize_grad(input, p=2, dim=1, eps=1e-12):
     return input / input.norm(p, dim, True).clamp(min=eps).expand_as(input)
@@ -130,7 +112,6 @@ def Graph_update(model, criterion, optimizer, mem_loader, train_loader, task, \
             'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
             'batchsize':8, 'total_updates': 1000} ):
         device=params['device']
-        import copy
         mem_iter = iter(mem_loader)
         task_iter = iter(train_loader)  
         # The main loop over all the batch
@@ -189,72 +170,139 @@ def Graph_update(model, criterion, optimizer, mem_loader, train_loader, task, \
                 optimizer.step()  # Update parameters based on gradients.
             return Total_loss.detach().cpu(), Total_loss.detach().cpu(), Total_loss.detach().cpu()
 
+# def Node_update_CCC(model, criterion, optimizer, mem_loader, train_loader, task, \
+#             params = {'x_updates': 1,  'theta_updates':1, 'factor': 0.0001,\
+#                  'x_lr': 0.0001,'th_lr':0.0001,\
+#             'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
+#             'batchsize':8, 'total_updates': 1000} ):
+#         device=params['device']
+#         for i in range(params['total_updates']): 
+#             if task>0:
+#                 # print("I am doing node classification")
+#                 import random
+#                 rand_index = random.randint(0,len(mem_loader)-1)
+#                 # Send the data to the device
+#                 data_m = mem_loader[rand_index].to(device)
+#                 # Apply the model on the task batch and the memory batch
+#                 out = model(train_loader.x.to(device), train_loader.edge_index.to(device))  # Perform a single fo
+#                 ## Get loss on the memory and task and put it together
+#                 J_P = criterion(out[train_loader.train_mask], train_loader.y[train_loader.train_mask].to(device))
+#                 J_M = criterion(out[data_m], train_loader.y[data_m].to(device))
+#                 mem_mask=torch.logical_or(train_loader.train_mask.to(device), data_m.to(device))
+                
+#                 ############## This is the J_x loss
+#                 #########################################################################################
+#                 # Add J_x  now
+#                 import copy
+#                 x_PN = copy.copy(train_loader.x).to(device)
+#                 x_PN.requires_grad = True
+#                 epsilon = params['x_lr']
+#                 # The x loop
+#                 for epoch in range(params["x_updates"]):
+#                     crit = criterion(model(x_PN.to(device), train_loader.edge_index.to(device))[mem_mask],train_loader.y[mem_mask].to(device) )
+#                     loss = torch.mean(crit)
+#                     # Calculate the gradient
+#                     adv_grad = torch.autograd.grad( loss,x_PN)[0]
+#                     # Normalize the gradient values.
+#                     adv_grad = normalize_grad(adv_grad, p=2, dim=1, eps=1e-12)
+#                     x_PN = x_PN+ epsilon*adv_grad   
+#                 # The critical cost function
+#                 J_x_crit = criterion( model(x_PN.to(device), train_loader.edge_index.to(device))[mem_mask], train_loader.y[mem_mask].to(device) )
+#                 # Derive gradients.
+#                 # Update parameters based on gradients.
+#                 ############### This is the loss J_th
+#                 #########################################################################################
+#                 opt_buffer = torch.optim.Adam(model.parameters(),lr = params['th_lr'])
+#                 optimizer.zero_grad()
+#                 with higher.innerloop_ctx(model, opt_buffer) as (fmodel, diffopt):
+#                     for _ in range(params["theta_updates"]):
+#                         loss_crit = criterion(fmodel(train_loader.x.to(device),\
+#                                 train_loader.edge_index.to(device))[mem_mask],\
+#                                 train_loader.y[mem_mask].to(device))
+#                         loss_m = -1*torch.mean(loss_crit) 
+#                         diffopt.step(loss_m)
+#                     J_th_crit = (criterion(fmodel(train_loader.x.to(device),train_loader.edge_index.to(device))[mem_mask], train_loader.y[mem_mask].to(device)))
+#                     Total_loss=torch.mean(J_M)+torch.mean(J_P) \
+#                         + params['factor']*(torch.mean(J_x_crit) +torch.mean(J_th_crit))
+#                     Total_loss.backward() 
+#                 optimizer.step() 
+#                 return Total_loss.detach().cpu(),\
+#                     (torch.mean(J_M)+torch.mean(J_x_crit)).detach().cpu(),\
+#                     (torch.mean(J_P)+torch.mean(J_th_crit)).detach().cpu()
+#             else:
+#                 out = model(train_loader.x.to(device), train_loader.edge_index.to(device))  # Perform a single fo
+#                 ## Get loss on the memory and task and put it together
+#                 critti = criterion(out[train_loader.train_mask], train_loader.y[train_loader.train_mask].to(device))
+#                 Total_loss = torch.mean(critti)
+#                 optimizer.zero_grad() 
+#                 Total_loss.backward()  # Derive gradients.
+#                 optimizer.step()  # Update parameters based on gradients.
+#                 return Total_loss.detach().cpu(), Total_loss.detach().cpu(), Total_loss.detach().cpu()
+
+
+
 def Node_update(model, criterion, optimizer, mem_loader, train_loader, task, \
-            params = {'x_updates': 1,  'theta_updates':1, 'factor': 0.0001, 'x_lr': 0.0001,'th_lr':0.0001,\
+            params = {'x_updates': 1,  'theta_updates':1, 'factor': 0.0001,\
+                 'x_lr': 0.0001,'th_lr':0.0001,\
             'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
             'batchsize':8, 'total_updates': 1000} ):
-        device=params['device']
-        ## The main loop over all the batch
+        x, edge_, y, mask_t = train_loader
+        # print("I entered the uodate loop ")
         for i in range(params['total_updates']): 
             if task>0:
-                # print("I am doing node classification")
-                import random
+                # Pull all the data and push to the device
+                # print("1 did you copying throw an error")
                 rand_index = random.randint(0,len(mem_loader)-1)
                 # Send the data to the device
-                data_m = mem_loader[rand_index].to(device)
-                # Apply the model on the task batch and the memory batch
-                out = model(train_loader.x.to(device), train_loader.edge_index.to(device))  # Perform a single fo
-                ## Get loss on the memory and task and put it together
-                J_P = criterion(out[train_loader.train_mask], train_loader.y[train_loader.train_mask].to(device))
-                J_M = criterion(out[data_m], train_loader.y[data_m].to(device))
-                mem_mask=torch.logical_or(train_loader.train_mask.to(device), data_m.to(device))
-                
-                ############## This is the J_x loss
-                #########################################################################################
-                # Add J_x  now
+                # print("2 did you copying throw an error")
+                data_m = mem_loader[rand_index].to(params['device'])
+                # print("3 did you copying throw an error")
+                out = model(x, edge_)  # Perform a single forward pass with the new data
+                J_P = criterion(out[mask_t], y[mask_t])
+                J_M = criterion(out[data_m], y[data_m])
+                mem_mask=torch.logical_or(mask_t, data_m)
                 import copy
-                x_PN = copy.copy(train_loader.x).to(device)
+                # print("4 did you copying throw an error")
+                x_PN=copy.copy(x)
                 x_PN.requires_grad = True
                 epsilon = params['x_lr']
                 # The x loop
                 for epoch in range(params["x_updates"]):
-                    crit = criterion(model(x_PN.to(device), train_loader.edge_index.to(device))[mem_mask],train_loader.y[mem_mask].to(device) )
-                    loss = torch.mean(crit)
-                    # Calculate the gradient
-                    adv_grad = torch.autograd.grad( loss,x_PN)[0]
-                    # Normalize the gradient values.
-                    adv_grad = normalize_grad(adv_grad, p=2, dim=1, eps=1e-12)
-                    x_PN = x_PN+ epsilon*adv_grad   
+                    x_PN = x_PN+epsilon*normalize_grad( torch.autograd.grad(\
+                    torch.mean(criterion(\
+                    model(x_PN, edge_)[mem_mask], y[mem_mask])),x_PN)[0],\
+                    p=2, dim=1, eps=1e-12)
                 # The critical cost function
-                J_x_crit = criterion( model(x_PN.to(device), train_loader.edge_index.to(device))[mem_mask], train_loader.y[mem_mask].to(device) )
-                # Derive gradients.
-                # Update parameters based on gradients.
-                ############### This is the loss J_th
-                #########################################################################################
-                opt_buffer = torch.optim.Adam(model.parameters(),lr = params['th_lr'])
+                J_x_crit = criterion( model(x, edge_)[mem_mask], y[mem_mask] )
                 optimizer.zero_grad()
-                with higher.innerloop_ctx(model, opt_buffer) as (fmodel, diffopt):
+                # print("I entered the higher loop ")
+                with higher.innerloop_ctx(model, optimizer) as (fmodel, diffopt):
                     for _ in range(params["theta_updates"]):
-                        loss_crit = criterion(fmodel(train_loader.x.to(device),train_loader.edge_index.to(device))[mem_mask], train_loader.y[mem_mask].to(device))
-                        loss_m = torch.mean(loss_crit) 
-                        diffopt.step(loss_m)
-                    J_th_crit = (criterion(fmodel(train_loader.x.to(device),train_loader.edge_index.to(device))[mem_mask], train_loader.y[mem_mask].to(device)))
-                    Total_loss=torch.mean(J_M+J_P)+ params['factor']*torch.mean(J_x_crit+J_th_crit)
+                        diffopt.step(-1*torch.mean(criterion(fmodel(x, edge_)[mem_mask],y[mem_mask])))
+                    J_th_crit = (criterion(fmodel(x,edge_)[mem_mask], y[mem_mask]))
+                    Total_loss=torch.mean(J_M)+torch.mean(J_P) \
+                        + params['factor']*(torch.mean(J_x_crit)+torch.mean(J_th_crit))
                     Total_loss.backward() 
+                # print("I exit the higher loop")
                 optimizer.step() 
                 return Total_loss.detach().cpu(),\
                     (torch.mean(J_M)+torch.mean(J_x_crit)).detach().cpu(),\
                     (torch.mean(J_P)+torch.mean(J_th_crit)).detach().cpu()
-
             else:
-                out = model(train_loader.x.to(device), train_loader.edge_index.to(device))  # Perform a single fo
-                ## Get loss on the memory and task and put it together
-                critti = criterion(out[train_loader.train_mask], train_loader.y[train_loader.train_mask].to(device))
-                Total_loss = torch.mean(critti)
+                # print("1here")
+                # with profile(activities=[ProfilerActivity.CPU], profile_memory=True, record_shapes=True) as prof:
+                Total_loss = torch.mean(criterion(model(x, edge_)[mask_t], y[mask_t]))
+
+
+                # print(prof.key_averages().table(sort_by="self_cpu_memory_usage", row_limit=10))
+                # print(prof.key_averages().table(sort_by="cpu_memory_usage", row_limit=10))
+                # print("2here")
                 optimizer.zero_grad() 
                 Total_loss.backward()  # Derive gradients.
                 optimizer.step()  # Update parameters based on gradients.
                 return Total_loss.detach().cpu(), Total_loss.detach().cpu(), Total_loss.detach().cpu()
+
+
 
 def Reg_update(model, criterion, optimizer, mem_loader, train_loader, task, \
             params = {'x_updates': 1,  'theta_updates':1, 'factor': 0.0001, 'x_lr': 0.0001,'th_lr':0.0001,\
@@ -352,11 +400,11 @@ def train_CL(model, criterion, optimizer, mem_loader, train_loader, task, graph 
             'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
             'batchsize':8, 'total_updates': 1000} )
 
-def continuum_node_classification( datas, n_Tasks, num_classes):
+def continuum_node_classification( datas, n_Tasks, num_classes, num_labels_task=1):
     dataset = datas[0]
     # print("features inside the start", dataset.x)
     n_labels = num_classes
-    n_labels_per_task = n_labels//n_Tasks
+    n_labels_per_task = num_labels_task
     # print("lable, n_task", n_labels, n_labels_per_task)
     labels_of_tasks = {}
     tasks=[]
@@ -375,34 +423,47 @@ def continuum_node_classification( datas, n_Tasks, num_classes):
     return tasks
 
 def _Acc_node(model, x, edge, y, mask, d='cuda'):
+    # print(mask.sum())
     # print("1 In the accuracy calculateion")
     # print(x.shape, y.shape, edge.shape, mask.shape)
     model.eval()
     # print("2 In the accuracy calculateion")
     # print(x.shape, y.shape, edge.shape, mask.shape)
-    out = model(x.to(d), edge.to(d))
+    out = model(x.to(d), edge.to(d)).cpu()
     # print("3 In the accuracy calculateion")
     # print(x.shape, y.shape, edge.shape, mask.shape)
     pred = out.argmax(dim=1)  # Use the class with highest probability.
-    test_correct = pred[mask] == y[mask].to(d)  # Check against ground-truth labels.
+    test_correct = pred[mask] == y[mask] # Check against ground-truth labels.
     test_acc = int(test_correct.sum()) / int(mask.sum())  # Derive ratio of correct predictions.
     # print("4 Out the accuracy calculateion")
     # print(x.shape, y.shape, edge.shape, mask.shape)
     return test_acc
 
+def _f1_node(model, x, edge, y, mask, d='cuda'):
+    #print(mask.sum())
+    with torch.no_grad():
+        # print("1 In the accuracy calculateion")
+        out = model(x, edge).cpu()
+        pred=torch.argmax(out,1)
+        f1_ = f1_score(y[mask].detach().numpy(), pred[mask].detach().numpy(),average='micro' )
+        #print("3 Out In the F1 calculation")
+        return f1_
+
+
 def test_NC(model, loader, masks, d="cuda"):
-    model.eval()
     # print("begin")
     # print(loader.x.shape, loader.y.shape, loader.edge_index.shape)
+    x, edge_index, y, _ = loader
     if len(masks) ==1:
         # print(masks[0].shape)
-        acc=[_Acc_node(model, loader.x, loader.edge_index, loader.y, masks[0], d='cuda')]
+        acc=[_Acc_node(model, x, edge_index, y.cpu(), masks[0].cpu())]
         # print("came out now")
-        f1=[_f1_node(model, loader.x, loader.edge_index, loader.y, masks[0], d='cuda')]
+        f1=[_f1_node(model, x, edge_index, y.cpu(), masks[0].cpu())]
     else:
-        # print(len(masks))
-        acc=[_Acc_node(model, loader.x, loader.edge_index, loader.y, mask, d='cuda') for mask in masks]
-        f1 =[_f1_node(model, loader.x, loader.edge_index, loader.y, mask, d='cuda') for mask in masks]
+        #print("In test NC")
+        #print(len(masks))
+        acc=[_Acc_node(model, x, edge_index, y.cpu(), masks[i].cpu()) for i in range(len(masks))]
+        f1 =[_f1_node(model, x, edge_index, y.cpu(), masks[i].cpu()) for i in range(len(masks))]
     # print("I am going out the test_NC")
     return sum(acc)/len(acc), sum(f1)/len(f1)
        
@@ -419,11 +480,9 @@ def test_GC(model, loader):
         f1_.append(f1_score(data.y.cpu().detach().numpy(),\
               pred.cpu().detach().numpy(),average='micro'))
     test_acc= (correct / len(loader.dataset))
-
     return test_acc, sum(f1_)/len(f1_)
 
 def continuum_Graph_classification(dataset, memory_train, memory_test, batch_size, task_id):
-    import random
     # print("new task", task_id)
     stack = [(dataset[j].y==task_id).item() for j in range(len(dataset))]
     datas = [ dataset[k] for k,val in enumerate(stack) if val== True] 
@@ -443,7 +502,8 @@ def continuum_Graph_classification(dataset, memory_train, memory_test, batch_siz
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
     mem_train_loader = DataLoader(memory_train, batch_size=batch_size, shuffle=True)
     mem_test_loader = DataLoader(memory_test, batch_size=batch_size, shuffle=True)
-    return train_loader, test_loader, mem_train_loader, mem_test_loader, memory_train, memory_test 
+    return train_loader, test_loader,\
+    mem_train_loader, mem_test_loader, memory_train, memory_test 
 
 ## The main code for the deephyper run...
 def load_data(data_label):   
@@ -468,9 +528,23 @@ def load_data(data_label):
         print(f'Number of classes: {dataset.num_classes}')
         return dataset
 
-    elif data_label=='Cora' or data_label=='PubMed' or data_label =='CiteSeer':
-        from torch_geometric.datasets import Planetoid
-        dataset = Planetoid(root='data/Planetoid', name=data_label)
+    elif data_label=='cora' or data_label=='PubMed'\
+        or data_label =='CiteSeer' or data_label=='cora_ML':
+        from torch_geometric.datasets import CitationFull
+        dataset = CitationFull(root='data/CitationFull', name=data_label)
+        data= dataset[0]
+        print(data)
+        print("from the load dataset", data.x)
+        print(f'Dataset: {dataset}:')
+        print('======================')
+        print(f'Number of graphs: {len(dataset)}')
+        print(f'Number of features: {dataset.num_features}')
+        print(f'Number of classes: {dataset.num_classes}')
+        return dataset
+    elif data_label=='Reddit':
+        print(data_label)
+        from torch_geometric.datasets import Reddit
+        dataset = Reddit(root='data/Reddit')
         data= dataset[0]
         print(data)
         print("from the load dataset", data.x)

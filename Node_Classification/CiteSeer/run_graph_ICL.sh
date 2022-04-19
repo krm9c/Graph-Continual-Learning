@@ -35,6 +35,6 @@
 
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate dh_posei
-python multi_run.py
+python multi_run_ICL.py
 conda deactivate
 
