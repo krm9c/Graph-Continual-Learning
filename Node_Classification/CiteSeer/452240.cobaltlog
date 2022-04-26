@@ -1,0 +1,25 @@
+Jobid: 452240
+qsub -n 1 -t 6:00:00 -q gpu_v100_smx2 run_graph_ITL.sh
+Tue Apr 19 05:56:21 2022 +0000 (UTC) submitted with cwd set to: /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/CiteSeer
+jobid 452240 submitted from terminal /dev/pts/9
+Tue Apr 19 06:16:31 2022 +0000 (UTC) 
+Tue Apr 19 06:16:31 2022 +0000 (UTC) Command: '/usr/bin/ssh' 'gpu02' '/usr/libexec/cobalt/cobalt-launcher.py' '--nf' '/var/tmp/cobalt.452240' '--jobid' '452240' '--cwd' '/home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/CiteSeer' '--env' 'COBALT_JOBID=452240' '/home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/CiteSeer/run_graph_ITL.sh'
+Tue Apr 19 06:16:31 2022 +0000 (UTC) 
+Tue Apr 19 06:16:31 2022 +0000 (UTC) Environment:
+Tue Apr 19 06:16:31 2022 +0000 (UTC) SHELL=/bin/bash
+Tue Apr 19 06:16:31 2022 +0000 (UTC) COBALT_NODEFILE=/tmp/tmp76lgz5
+Tue Apr 19 06:16:31 2022 +0000 (UTC) COBALT_PARTNAME=gpu02
+Tue Apr 19 06:16:31 2022 +0000 (UTC) COBALT_JOBID=452240
+Tue Apr 19 06:16:31 2022 +0000 (UTC) COBALT_STARTTIME=1650348980
+Tue Apr 19 06:16:31 2022 +0000 (UTC) LOGNAME=kraghavan
+Tue Apr 19 06:16:31 2022 +0000 (UTC) USER=kraghavan
+Tue Apr 19 06:16:31 2022 +0000 (UTC) COBALT_ENDTIME=1650370580
+Tue Apr 19 06:16:31 2022 +0000 (UTC) COBALT_PARTSIZE=1
+Tue Apr 19 06:16:31 2022 +0000 (UTC) HOME=/home/kraghavan
+Tue Apr 19 06:16:31 2022 +0000 (UTC) COBALT_JOBSIZE=1
+Tue Apr 19 06:16:31 2022 +0000 (UTC) 
+Tue Apr 19 06:16:31 2022 +0000 (UTC) Info: stdin received from /dev/null
+Tue Apr 19 06:16:31 2022 +0000 (UTC) Info: stdout sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/CiteSeer/452240.output
+Tue Apr 19 06:16:31 2022 +0000 (UTC) Info: stderr sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/CiteSeer/452240.error
+Tue Apr 19 06:16:31 2022 +0000 (UTC) 
+Tue Apr 19 06:21:45 2022 +0000 (UTC) Info: task completed normally with an exit code of 0; initiating job cleanup and removal

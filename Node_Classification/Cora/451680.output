@@ -1,0 +1,115 @@
+Data(x=[2995, 2879], edge_index=[2, 16316], y=[2995])
+from the load dataset tensor([[0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.]])
+Dataset: Cora_mlFull():
+======================
+Number of graphs: 1
+Number of features: 2879
+Number of classes: 7
+Data(x=[2995, 2879], edge_index=[2, 16316], y=[2995])
+selected 7 ids from 7
+(100, 7) (100, 7) (100, 7) (100, 7)
+Task: 000, Epoch: 2000, Test Acc: 1.000,  Mem Test Acc: 1.000, Test F1: 1.000, Mem Test F1: 1.000
+Task: 001, Epoch: 4000, Test Acc: 0.952,  Mem Test Acc: 0.963, Test F1: 0.952, Mem Test F1: 0.963
+Task: 002, Epoch: 6000, Test Acc: 0.879,  Mem Test Acc: 0.864, Test F1: 0.879, Mem Test F1: 0.864
+Task: 003, Epoch: 8000, Test Acc: 0.821,  Mem Test Acc: 0.705, Test F1: 0.821, Mem Test F1: 0.705
+Task: 004, Epoch: 10000, Test Acc: 0.887,  Mem Test Acc: 0.750, Test F1: 0.887, Mem Test F1: 0.750
+Task: 005, Epoch: 12000, Test Acc: 0.899,  Mem Test Acc: 0.722, Test F1: 0.899, Mem Test F1: 0.722
+Task: 006, Epoch: 14000, Test Acc: 0.922,  Mem Test Acc: 0.752, Test F1: 0.922, Mem Test F1: 0.752
+##########################################
+PM: 0.922, FM: 0.248, AP: 0.752, AF: 0.030
+##########################################
+(7,) (7,) (7,) (7,)
+Task: 000, Epoch: 2000, Test Acc: 1.000,  Mem Test Acc: 1.000, Test F1: 1.000, Mem Test F1: 1.000
+Task: 001, Epoch: 4000, Test Acc: 0.952,  Mem Test Acc: 0.968, Test F1: 0.952, Mem Test F1: 0.968
+Task: 002, Epoch: 6000, Test Acc: 0.850,  Mem Test Acc: 0.840, Test F1: 0.850, Mem Test F1: 0.840
+Task: 003, Epoch: 8000, Test Acc: 0.844,  Mem Test Acc: 0.742, Test F1: 0.844, Mem Test F1: 0.742
+Task: 004, Epoch: 10000, Test Acc: 0.926,  Mem Test Acc: 0.791, Test F1: 0.926, Mem Test F1: 0.791
+Task: 005, Epoch: 12000, Test Acc: 0.821,  Mem Test Acc: 0.748, Test F1: 0.821, Mem Test F1: 0.748
+Task: 006, Epoch: 14000, Test Acc: 0.937,  Mem Test Acc: 0.752, Test F1: 0.937, Mem Test F1: 0.752
+##########################################
+PM: 0.937, FM: 0.248, AP: 0.752, AF: 0.004
+##########################################
+(7,) (7,) (7,) (7,)
+Task: 000, Epoch: 2000, Test Acc: 1.000,  Mem Test Acc: 1.000, Test F1: 1.000, Mem Test F1: 1.000
+Task: 001, Epoch: 4000, Test Acc: 0.952,  Mem Test Acc: 0.967, Test F1: 0.952, Mem Test F1: 0.967
+Task: 002, Epoch: 6000, Test Acc: 0.868,  Mem Test Acc: 0.882, Test F1: 0.868, Mem Test F1: 0.882
+Task: 003, Epoch: 8000, Test Acc: 0.835,  Mem Test Acc: 0.737, Test F1: 0.835, Mem Test F1: 0.737
+Task: 004, Epoch: 10000, Test Acc: 0.918,  Mem Test Acc: 0.764, Test F1: 0.918, Mem Test F1: 0.764
+Task: 005, Epoch: 12000, Test Acc: 0.828,  Mem Test Acc: 0.734, Test F1: 0.828, Mem Test F1: 0.734
+Task: 006, Epoch: 14000, Test Acc: 0.859,  Mem Test Acc: 0.756, Test F1: 0.859, Mem Test F1: 0.756
+##########################################
+PM: 0.859, FM: 0.244, AP: 0.756, AF: 0.022
+##########################################
+(7,) (7,) (7,) (7,)
+Task: 000, Epoch: 2000, Test Acc: 1.000,  Mem Test Acc: 1.000, Test F1: 1.000, Mem Test F1: 1.000
+Task: 001, Epoch: 4000, Test Acc: 0.970,  Mem Test Acc: 0.973, Test F1: 0.970, Mem Test F1: 0.973
+Task: 002, Epoch: 6000, Test Acc: 0.902,  Mem Test Acc: 0.832, Test F1: 0.902, Mem Test F1: 0.832
+Task: 003, Epoch: 8000, Test Acc: 0.789,  Mem Test Acc: 0.692, Test F1: 0.789, Mem Test F1: 0.692
+Task: 004, Epoch: 10000, Test Acc: 0.945,  Mem Test Acc: 0.734, Test F1: 0.945, Mem Test F1: 0.734
+Task: 005, Epoch: 12000, Test Acc: 0.909,  Mem Test Acc: 0.708, Test F1: 0.909, Mem Test F1: 0.708
+Task: 006, Epoch: 14000, Test Acc: 0.927,  Mem Test Acc: 0.737, Test F1: 0.927, Mem Test F1: 0.737
+##########################################
+PM: 0.927, FM: 0.263, AP: 0.737, AF: 0.029
+##########################################
+(7,) (7,) (7,) (7,)
+Task: 000, Epoch: 2000, Test Acc: 1.000,  Mem Test Acc: 1.000, Test F1: 1.000, Mem Test F1: 1.000
+Task: 001, Epoch: 4000, Test Acc: 0.916,  Mem Test Acc: 0.952, Test F1: 0.916, Mem Test F1: 0.952
+Task: 002, Epoch: 6000, Test Acc: 0.844,  Mem Test Acc: 0.836, Test F1: 0.844, Mem Test F1: 0.836
+Task: 003, Epoch: 8000, Test Acc: 0.844,  Mem Test Acc: 0.739, Test F1: 0.844, Mem Test F1: 0.739
+Task: 004, Epoch: 10000, Test Acc: 0.926,  Mem Test Acc: 0.751, Test F1: 0.926, Mem Test F1: 0.751
+Task: 005, Epoch: 12000, Test Acc: 0.815,  Mem Test Acc: 0.756, Test F1: 0.815, Mem Test F1: 0.756
+Task: 006, Epoch: 14000, Test Acc: 0.960,  Mem Test Acc: 0.738, Test F1: 0.960, Mem Test F1: 0.738
+##########################################
+PM: 0.960, FM: 0.262, AP: 0.738, AF: 0.018
+##########################################
+(7,) (7,) (7,) (7,)
+Task: 000, Epoch: 2000, Test Acc: 1.000,  Mem Test Acc: 1.000, Test F1: 1.000, Mem Test F1: 1.000
+Task: 001, Epoch: 4000, Test Acc: 0.946,  Mem Test Acc: 0.965, Test F1: 0.946, Mem Test F1: 0.965
+Task: 002, Epoch: 6000, Test Acc: 0.879,  Mem Test Acc: 0.844, Test F1: 0.879, Mem Test F1: 0.844
+Task: 003, Epoch: 8000, Test Acc: 0.772,  Mem Test Acc: 0.689, Test F1: 0.772, Mem Test F1: 0.689
+Task: 004, Epoch: 10000, Test Acc: 0.914,  Mem Test Acc: 0.721, Test F1: 0.914, Mem Test F1: 0.721
+Task: 005, Epoch: 12000, Test Acc: 0.828,  Mem Test Acc: 0.726, Test F1: 0.828, Mem Test F1: 0.726
+Task: 006, Epoch: 14000, Test Acc: 0.874,  Mem Test Acc: 0.745, Test F1: 0.874, Mem Test F1: 0.745
+##########################################
+PM: 0.874, FM: 0.255, AP: 0.745, AF: 0.019
+##########################################
+(7,) (7,) (7,) (7,)
+Task: 000, Epoch: 2000, Test Acc: 1.000,  Mem Test Acc: 1.000, Test F1: 1.000, Mem Test F1: 1.000
+Task: 001, Epoch: 4000, Test Acc: 0.874,  Mem Test Acc: 0.933, Test F1: 0.874, Mem Test F1: 0.933
+Task: 002, Epoch: 6000, Test Acc: 0.881,  Mem Test Acc: 0.858, Test F1: 0.881, Mem Test F1: 0.858
+Task: 003, Epoch: 8000, Test Acc: 0.844,  Mem Test Acc: 0.727, Test F1: 0.844, Mem Test F1: 0.727
+Task: 004, Epoch: 10000, Test Acc: 0.953,  Mem Test Acc: 0.758, Test F1: 0.953, Mem Test F1: 0.758
+Task: 005, Epoch: 12000, Test Acc: 0.860,  Mem Test Acc: 0.724, Test F1: 0.860, Mem Test F1: 0.724
+Task: 006, Epoch: 14000, Test Acc: 0.942,  Mem Test Acc: 0.738, Test F1: 0.942, Mem Test F1: 0.738
+##########################################
+PM: 0.942, FM: 0.262, AP: 0.738, AF: 0.014
+##########################################
+(7,) (7,) (7,) (7,)
+Task: 000, Epoch: 2000, Test Acc: 1.000,  Mem Test Acc: 1.000, Test F1: 1.000, Mem Test F1: 1.000
+Task: 001, Epoch: 4000, Test Acc: 0.946,  Mem Test Acc: 0.966, Test F1: 0.946, Mem Test F1: 0.966
+Task: 002, Epoch: 6000, Test Acc: 0.834,  Mem Test Acc: 0.857, Test F1: 0.834, Mem Test F1: 0.857
+Task: 003, Epoch: 8000, Test Acc: 0.757,  Mem Test Acc: 0.748, Test F1: 0.757, Mem Test F1: 0.748
+Task: 004, Epoch: 10000, Test Acc: 0.914,  Mem Test Acc: 0.748, Test F1: 0.914, Mem Test F1: 0.748
+Task: 005, Epoch: 12000, Test Acc: 0.792,  Mem Test Acc: 0.731, Test F1: 0.792, Mem Test F1: 0.731
+Task: 006, Epoch: 14000, Test Acc: 0.904,  Mem Test Acc: 0.748, Test F1: 0.904, Mem Test F1: 0.748
+##########################################
+PM: 0.904, FM: 0.252, AP: 0.748, AF: 0.017
+##########################################
+(7,) (7,) (7,) (7,)
+Task: 000, Epoch: 2000, Test Acc: 1.000,  Mem Test Acc: 1.000, Test F1: 1.000, Mem Test F1: 1.000
+Task: 001, Epoch: 4000, Test Acc: 0.850,  Mem Test Acc: 0.915, Test F1: 0.850, Mem Test F1: 0.915
+Task: 002, Epoch: 6000, Test Acc: 0.821,  Mem Test Acc: 0.825, Test F1: 0.821, Mem Test F1: 0.825
+Task: 003, Epoch: 8000, Test Acc: 0.821,  Mem Test Acc: 0.711, Test F1: 0.821, Mem Test F1: 0.711
+Task: 004, Epoch: 10000, Test Acc: 0.938,  Mem Test Acc: 0.743, Test F1: 0.938, Mem Test F1: 0.743
+Task: 005, Epoch: 12000, Test Acc: 0.857,  Mem Test Acc: 0.720, Test F1: 0.857, Mem Test F1: 0.720
+Task: 006, Epoch: 14000, Test Acc: 0.937,  Mem Test Acc: 0.698, Test F1: 0.937, Mem Test F1: 0.698
+##########################################
+PM: 0.937, FM: 0.302, AP: 0.698, AF: 0.022
+##########################################
+(7,) (7,) (7,) (7,)

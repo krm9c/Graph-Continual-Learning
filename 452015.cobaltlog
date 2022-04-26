@@ -1,0 +1,25 @@
+Jobid: 452015
+qsub -n 1 -t 6:00:00 -q dgx -I
+Mon Apr 18 16:44:50 2022 +0000 (UTC) submitted with cwd set to: /home/kraghavan/Projects/CL/Graph-Continual-Learning
+jobid 452015 submitted from terminal /dev/pts/0
+Mon Apr 18 16:45:04 2022 +0000 (UTC) 
+Mon Apr 18 16:45:04 2022 +0000 (UTC) Command: '/usr/bin/ssh' 'dgx2' '/usr/libexec/cobalt/cobalt-launcher.py' '--nf' '/var/tmp/cobalt.452015' '--jobid' '452015' '--cwd' '/home/kraghavan/Projects/CL/Graph-Continual-Learning' '--env' 'COBALT_JOBID=452015' '/bin/sleep' '21600'
+Mon Apr 18 16:45:04 2022 +0000 (UTC) 
+Mon Apr 18 16:45:04 2022 +0000 (UTC) Environment:
+Mon Apr 18 16:45:04 2022 +0000 (UTC) SHELL=/bin/bash
+Mon Apr 18 16:45:04 2022 +0000 (UTC) COBALT_NODEFILE=/tmp/tmpfj5WNT
+Mon Apr 18 16:45:04 2022 +0000 (UTC) COBALT_PARTNAME=dgx2
+Mon Apr 18 16:45:04 2022 +0000 (UTC) COBALT_JOBID=452015
+Mon Apr 18 16:45:04 2022 +0000 (UTC) COBALT_STARTTIME=1650300291
+Mon Apr 18 16:45:04 2022 +0000 (UTC) LOGNAME=kraghavan
+Mon Apr 18 16:45:04 2022 +0000 (UTC) USER=kraghavan
+Mon Apr 18 16:45:04 2022 +0000 (UTC) COBALT_ENDTIME=1650321891
+Mon Apr 18 16:45:04 2022 +0000 (UTC) COBALT_PARTSIZE=1
+Mon Apr 18 16:45:04 2022 +0000 (UTC) HOME=/home/kraghavan
+Mon Apr 18 16:45:04 2022 +0000 (UTC) COBALT_JOBSIZE=1
+Mon Apr 18 16:45:04 2022 +0000 (UTC) 
+Mon Apr 18 16:45:04 2022 +0000 (UTC) Info: stdin received from /dev/null
+Mon Apr 18 16:45:04 2022 +0000 (UTC) Info: stdout sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/452015.output
+Mon Apr 18 16:45:04 2022 +0000 (UTC) Info: stderr sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/452015.error
+Mon Apr 18 16:45:04 2022 +0000 (UTC) 
+Mon Apr 18 17:47:52 2022 +0000 (UTC) Info: user delete requested with signal SIGTERM by user kraghavan

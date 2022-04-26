@@ -1,0 +1,25 @@
+Jobid: 451681
+qsub -n 1 -t 6:00:00 -q dgx run_graph_ITL.sh
+Mon Apr 18 00:09:39 2022 +0000 (UTC) submitted with cwd set to: /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora
+jobid 451681 submitted from terminal /dev/pts/7
+Mon Apr 18 06:17:00 2022 +0000 (UTC) 
+Mon Apr 18 06:17:00 2022 +0000 (UTC) Command: '/usr/bin/ssh' 'dgx2' '/usr/libexec/cobalt/cobalt-launcher.py' '--nf' '/var/tmp/cobalt.451681' '--jobid' '451681' '--cwd' '/home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora' '--env' 'COBALT_JOBID=451681' '/home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora/run_graph_ITL.sh'
+Mon Apr 18 06:17:00 2022 +0000 (UTC) 
+Mon Apr 18 06:17:00 2022 +0000 (UTC) Environment:
+Mon Apr 18 06:17:00 2022 +0000 (UTC) SHELL=/bin/bash
+Mon Apr 18 06:17:00 2022 +0000 (UTC) COBALT_NODEFILE=/tmp/tmpMF5NZK
+Mon Apr 18 06:17:00 2022 +0000 (UTC) COBALT_PARTNAME=dgx2
+Mon Apr 18 06:17:00 2022 +0000 (UTC) COBALT_JOBID=451681
+Mon Apr 18 06:17:00 2022 +0000 (UTC) COBALT_STARTTIME=1650262609
+Mon Apr 18 06:17:00 2022 +0000 (UTC) LOGNAME=kraghavan
+Mon Apr 18 06:17:00 2022 +0000 (UTC) USER=kraghavan
+Mon Apr 18 06:17:00 2022 +0000 (UTC) COBALT_ENDTIME=1650284209
+Mon Apr 18 06:17:00 2022 +0000 (UTC) COBALT_PARTSIZE=1
+Mon Apr 18 06:17:00 2022 +0000 (UTC) HOME=/home/kraghavan
+Mon Apr 18 06:17:00 2022 +0000 (UTC) COBALT_JOBSIZE=1
+Mon Apr 18 06:17:00 2022 +0000 (UTC) 
+Mon Apr 18 06:17:00 2022 +0000 (UTC) Info: stdin received from /dev/null
+Mon Apr 18 06:17:00 2022 +0000 (UTC) Info: stdout sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora/451681.output
+Mon Apr 18 06:17:00 2022 +0000 (UTC) Info: stderr sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora/451681.error
+Mon Apr 18 06:17:00 2022 +0000 (UTC) 
+Mon Apr 18 12:16:54 2022 +0000 (UTC) Info: maximum execution time exceeded; initiating job termination

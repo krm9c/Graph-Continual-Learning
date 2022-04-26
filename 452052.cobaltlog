@@ -1,0 +1,25 @@
+Jobid: 452052
+qsub -n 1 -t 6:00:00 -q gpu_a100 -I
+Mon Apr 18 19:15:25 2022 +0000 (UTC) submitted with cwd set to: /home/kraghavan/Projects/CL/Graph-Continual-Learning
+jobid 452052 submitted from terminal /dev/pts/0
+Mon Apr 18 19:15:46 2022 +0000 (UTC) 
+Mon Apr 18 19:15:46 2022 +0000 (UTC) Command: '/usr/bin/ssh' 'gpu07' '/usr/libexec/cobalt/cobalt-launcher.py' '--nf' '/var/tmp/cobalt.452052' '--jobid' '452052' '--cwd' '/home/kraghavan/Projects/CL/Graph-Continual-Learning' '--env' 'COBALT_JOBID=452052' '/bin/sleep' '21600'
+Mon Apr 18 19:15:46 2022 +0000 (UTC) 
+Mon Apr 18 19:15:46 2022 +0000 (UTC) Environment:
+Mon Apr 18 19:15:46 2022 +0000 (UTC) SHELL=/bin/bash
+Mon Apr 18 19:15:46 2022 +0000 (UTC) COBALT_NODEFILE=/tmp/tmpBtMh93
+Mon Apr 18 19:15:46 2022 +0000 (UTC) COBALT_PARTNAME=gpu07
+Mon Apr 18 19:15:46 2022 +0000 (UTC) COBALT_JOBID=452052
+Mon Apr 18 19:15:46 2022 +0000 (UTC) COBALT_STARTTIME=1650309332
+Mon Apr 18 19:15:46 2022 +0000 (UTC) LOGNAME=kraghavan
+Mon Apr 18 19:15:46 2022 +0000 (UTC) USER=kraghavan
+Mon Apr 18 19:15:46 2022 +0000 (UTC) COBALT_ENDTIME=1650330932
+Mon Apr 18 19:15:46 2022 +0000 (UTC) COBALT_PARTSIZE=1
+Mon Apr 18 19:15:46 2022 +0000 (UTC) HOME=/home/kraghavan
+Mon Apr 18 19:15:46 2022 +0000 (UTC) COBALT_JOBSIZE=1
+Mon Apr 18 19:15:46 2022 +0000 (UTC) 
+Mon Apr 18 19:15:46 2022 +0000 (UTC) Info: stdin received from /dev/null
+Mon Apr 18 19:15:46 2022 +0000 (UTC) Info: stdout sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/452052.output
+Mon Apr 18 19:15:46 2022 +0000 (UTC) Info: stderr sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/452052.error
+Mon Apr 18 19:15:46 2022 +0000 (UTC) 
+Mon Apr 18 20:30:10 2022 +0000 (UTC) Info: user delete requested with signal SIGTERM by user kraghavan

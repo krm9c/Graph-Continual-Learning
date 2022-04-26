@@ -1,0 +1,5 @@
+Jobid: 452028
+qsub -n 1 -t 6:00:00 -q gpu_a100 -I
+Mon Apr 18 17:48:05 2022 +0000 (UTC) submitted with cwd set to: /home/kraghavan/Projects/CL/Graph-Continual-Learning
+jobid 452028 submitted from terminal /dev/pts/0
+Mon Apr 18 17:49:39 2022 +0000 (UTC) Info: user delete requested; removing job from the queue

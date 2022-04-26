@@ -1,0 +1,94 @@
+Data(x=[4230, 602], edge_index=[2, 10674], y=[4230])
+from the load dataset tensor([[0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.]])
+Dataset: CiteseerFull():
+======================
+Number of graphs: 1
+Number of features: 602
+Number of classes: 6
+selected 6 ids from 6
+tensor([False, False, False,  ..., False, False, False]) tensor([ True, False,  True,  ...,  True,  True, False])
+Task: 000, Epoch: 500, Test Acc: 0.971,            Mem Test Acc: 0.971, Test F1: 0.971,            Mem Test F1: 0.971
+Task: 001, Epoch: 500, Test Acc: 0.915,            Mem Test Acc: 0.872, Test F1: 0.915,            Mem Test F1: 0.872
+Task: 002, Epoch: 500, Test Acc: 0.906,            Mem Test Acc: 0.859, Test F1: 0.906,            Mem Test F1: 0.859
+##########################################
+PM: 0.906, FM: 0.111, AP: 0.859, AF: 0.013
+##########################################
+(3,) (3,) (3,) (3,)
+tensor([False, False, False,  ..., False, False, False]) tensor([ True, False,  True,  ...,  True,  True, False])
+Task: 000, Epoch: 500, Test Acc: 0.955,            Mem Test Acc: 0.955, Test F1: 0.955,            Mem Test F1: 0.955
+Task: 001, Epoch: 500, Test Acc: 0.918,            Mem Test Acc: 0.875, Test F1: 0.918,            Mem Test F1: 0.875
+Task: 002, Epoch: 500, Test Acc: 0.898,            Mem Test Acc: 0.852, Test F1: 0.898,            Mem Test F1: 0.852
+##########################################
+PM: 0.898, FM: 0.104, AP: 0.852, AF: 0.024
+##########################################
+(3,) (3,) (3,) (3,)
+tensor([False, False, False,  ..., False, False, False]) tensor([ True, False,  True,  ...,  True,  True, False])
+Task: 000, Epoch: 500, Test Acc: 0.955,            Mem Test Acc: 0.955, Test F1: 0.955,            Mem Test F1: 0.955
+Task: 001, Epoch: 500, Test Acc: 0.917,            Mem Test Acc: 0.870, Test F1: 0.917,            Mem Test F1: 0.870
+Task: 002, Epoch: 500, Test Acc: 0.902,            Mem Test Acc: 0.833, Test F1: 0.902,            Mem Test F1: 0.833
+##########################################
+PM: 0.902, FM: 0.122, AP: 0.833, AF: 0.037
+##########################################
+(3,) (3,) (3,) (3,)
+tensor([False, False, False,  ..., False, False, False]) tensor([ True, False,  True,  ...,  True,  True, False])
+Task: 000, Epoch: 500, Test Acc: 0.931,            Mem Test Acc: 0.931, Test F1: 0.931,            Mem Test F1: 0.931
+Task: 001, Epoch: 500, Test Acc: 0.921,            Mem Test Acc: 0.852, Test F1: 0.921,            Mem Test F1: 0.852
+Task: 002, Epoch: 500, Test Acc: 0.907,            Mem Test Acc: 0.857, Test F1: 0.907,            Mem Test F1: 0.857
+##########################################
+PM: 0.907, FM: 0.074, AP: 0.857, AF: 0.005
+##########################################
+(3,) (3,) (3,) (3,)
+tensor([False, False, False,  ..., False, False, False]) tensor([ True, False,  True,  ...,  True,  True, False])
+Task: 000, Epoch: 500, Test Acc: 0.973,            Mem Test Acc: 0.973, Test F1: 0.973,            Mem Test F1: 0.973
+Task: 001, Epoch: 500, Test Acc: 0.918,            Mem Test Acc: 0.867, Test F1: 0.918,            Mem Test F1: 0.867
+Task: 002, Epoch: 500, Test Acc: 0.889,            Mem Test Acc: 0.856, Test F1: 0.889,            Mem Test F1: 0.856
+##########################################
+PM: 0.889, FM: 0.117, AP: 0.856, AF: 0.011
+##########################################
+(3,) (3,) (3,) (3,)
+tensor([False, False, False,  ..., False, False, False]) tensor([ True, False,  True,  ...,  True,  True, False])
+Task: 000, Epoch: 500, Test Acc: 0.947,            Mem Test Acc: 0.947, Test F1: 0.947,            Mem Test F1: 0.947
+Task: 001, Epoch: 500, Test Acc: 0.912,            Mem Test Acc: 0.854, Test F1: 0.912,            Mem Test F1: 0.854
+Task: 002, Epoch: 500, Test Acc: 0.896,            Mem Test Acc: 0.848, Test F1: 0.896,            Mem Test F1: 0.848
+##########################################
+PM: 0.896, FM: 0.099, AP: 0.848, AF: 0.006
+##########################################
+(3,) (3,) (3,) (3,)
+tensor([False, False, False,  ..., False, False, False]) tensor([ True, False,  True,  ...,  True,  True, False])
+Task: 000, Epoch: 500, Test Acc: 0.957,            Mem Test Acc: 0.957, Test F1: 0.957,            Mem Test F1: 0.957
+Task: 001, Epoch: 500, Test Acc: 0.917,            Mem Test Acc: 0.869, Test F1: 0.917,            Mem Test F1: 0.869
+Task: 002, Epoch: 500, Test Acc: 0.923,            Mem Test Acc: 0.854, Test F1: 0.923,            Mem Test F1: 0.854
+##########################################
+PM: 0.923, FM: 0.103, AP: 0.854, AF: 0.015
+##########################################
+(3,) (3,) (3,) (3,)
+tensor([False, False, False,  ..., False, False, False]) tensor([ True, False,  True,  ...,  True,  True, False])
+Task: 000, Epoch: 500, Test Acc: 0.942,            Mem Test Acc: 0.942, Test F1: 0.942,            Mem Test F1: 0.942
+Task: 001, Epoch: 500, Test Acc: 0.921,            Mem Test Acc: 0.877, Test F1: 0.921,            Mem Test F1: 0.877
+Task: 002, Epoch: 500, Test Acc: 0.894,            Mem Test Acc: 0.855, Test F1: 0.894,            Mem Test F1: 0.855
+##########################################
+PM: 0.894, FM: 0.087, AP: 0.855, AF: 0.022
+##########################################
+(3,) (3,) (3,) (3,)
+tensor([False, False, False,  ..., False, False, False]) tensor([ True, False,  True,  ...,  True,  True, False])
+Task: 000, Epoch: 500, Test Acc: 0.951,            Mem Test Acc: 0.951, Test F1: 0.951,            Mem Test F1: 0.951
+Task: 001, Epoch: 500, Test Acc: 0.926,            Mem Test Acc: 0.869, Test F1: 0.926,            Mem Test F1: 0.869
+Task: 002, Epoch: 500, Test Acc: 0.904,            Mem Test Acc: 0.852, Test F1: 0.904,            Mem Test F1: 0.852
+##########################################
+PM: 0.904, FM: 0.099, AP: 0.852, AF: 0.017
+##########################################
+(3,) (3,) (3,) (3,)
+tensor([False, False, False,  ..., False, False, False]) tensor([ True, False,  True,  ...,  True,  True, False])
+Task: 000, Epoch: 500, Test Acc: 0.954,            Mem Test Acc: 0.954, Test F1: 0.954,            Mem Test F1: 0.954
+Task: 001, Epoch: 500, Test Acc: 0.912,            Mem Test Acc: 0.873, Test F1: 0.912,            Mem Test F1: 0.873
+Task: 002, Epoch: 500, Test Acc: 0.880,            Mem Test Acc: 0.854, Test F1: 0.880,            Mem Test F1: 0.854
+##########################################
+PM: 0.880, FM: 0.100, AP: 0.854, AF: 0.019
+##########################################
+(3,) (3,) (3,) (3,)

@@ -1,0 +1,25 @@
+Jobid: 452125
+qsub -n 1 -t 6:00:00 -q gpu_a100 run_graph_ICL.sh
+Tue Apr 19 01:34:36 2022 +0000 (UTC) submitted with cwd set to: /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora
+jobid 452125 submitted from terminal /dev/pts/29
+Tue Apr 19 01:41:15 2022 +0000 (UTC) 
+Tue Apr 19 01:41:15 2022 +0000 (UTC) Command: '/usr/bin/ssh' 'gpu07' '/usr/libexec/cobalt/cobalt-launcher.py' '--nf' '/var/tmp/cobalt.452125' '--jobid' '452125' '--cwd' '/home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora' '--env' 'COBALT_JOBID=452125' '/home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora/run_graph_ICL.sh'
+Tue Apr 19 01:41:15 2022 +0000 (UTC) 
+Tue Apr 19 01:41:15 2022 +0000 (UTC) Environment:
+Tue Apr 19 01:41:15 2022 +0000 (UTC) SHELL=/bin/bash
+Tue Apr 19 01:41:15 2022 +0000 (UTC) COBALT_NODEFILE=/tmp/tmpHsnTOy
+Tue Apr 19 01:41:15 2022 +0000 (UTC) COBALT_PARTNAME=gpu07
+Tue Apr 19 01:41:15 2022 +0000 (UTC) COBALT_JOBID=452125
+Tue Apr 19 01:41:15 2022 +0000 (UTC) COBALT_STARTTIME=1650332457
+Tue Apr 19 01:41:15 2022 +0000 (UTC) LOGNAME=kraghavan
+Tue Apr 19 01:41:15 2022 +0000 (UTC) USER=kraghavan
+Tue Apr 19 01:41:15 2022 +0000 (UTC) COBALT_ENDTIME=1650354057
+Tue Apr 19 01:41:15 2022 +0000 (UTC) COBALT_PARTSIZE=1
+Tue Apr 19 01:41:15 2022 +0000 (UTC) HOME=/home/kraghavan
+Tue Apr 19 01:41:15 2022 +0000 (UTC) COBALT_JOBSIZE=1
+Tue Apr 19 01:41:15 2022 +0000 (UTC) 
+Tue Apr 19 01:41:15 2022 +0000 (UTC) Info: stdin received from /dev/null
+Tue Apr 19 01:41:15 2022 +0000 (UTC) Info: stdout sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora/452125.output
+Tue Apr 19 01:41:15 2022 +0000 (UTC) Info: stderr sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora/452125.error
+Tue Apr 19 01:41:15 2022 +0000 (UTC) 
+Tue Apr 19 01:41:28 2022 +0000 (UTC) Info: task completed normally with an exit code of 0; initiating job cleanup and removal

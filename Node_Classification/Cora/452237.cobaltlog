@@ -1,0 +1,25 @@
+Jobid: 452237
+qsub -n 1 -t 6:00:00 -q gpu_v100_smx2 -I
+Tue Apr 19 05:48:30 2022 +0000 (UTC) submitted with cwd set to: /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora
+jobid 452237 submitted from terminal /dev/pts/2
+Tue Apr 19 05:48:56 2022 +0000 (UTC) 
+Tue Apr 19 05:48:56 2022 +0000 (UTC) Command: '/usr/bin/ssh' 'gpu02' '/usr/libexec/cobalt/cobalt-launcher.py' '--nf' '/var/tmp/cobalt.452237' '--jobid' '452237' '--cwd' '/home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora' '--env' 'COBALT_JOBID=452237' '/bin/sleep' '21600'
+Tue Apr 19 05:48:56 2022 +0000 (UTC) 
+Tue Apr 19 05:48:56 2022 +0000 (UTC) Environment:
+Tue Apr 19 05:48:56 2022 +0000 (UTC) SHELL=/bin/bash
+Tue Apr 19 05:48:56 2022 +0000 (UTC) COBALT_NODEFILE=/tmp/tmprFLFzw
+Tue Apr 19 05:48:56 2022 +0000 (UTC) COBALT_PARTNAME=gpu02
+Tue Apr 19 05:48:56 2022 +0000 (UTC) COBALT_JOBID=452237
+Tue Apr 19 05:48:56 2022 +0000 (UTC) COBALT_STARTTIME=1650347317
+Tue Apr 19 05:48:56 2022 +0000 (UTC) LOGNAME=kraghavan
+Tue Apr 19 05:48:56 2022 +0000 (UTC) USER=kraghavan
+Tue Apr 19 05:48:56 2022 +0000 (UTC) COBALT_ENDTIME=1650368917
+Tue Apr 19 05:48:56 2022 +0000 (UTC) COBALT_PARTSIZE=1
+Tue Apr 19 05:48:56 2022 +0000 (UTC) HOME=/home/kraghavan
+Tue Apr 19 05:48:56 2022 +0000 (UTC) COBALT_JOBSIZE=1
+Tue Apr 19 05:48:56 2022 +0000 (UTC) 
+Tue Apr 19 05:48:56 2022 +0000 (UTC) Info: stdin received from /dev/null
+Tue Apr 19 05:48:56 2022 +0000 (UTC) Info: stdout sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora/452237.output
+Tue Apr 19 05:48:56 2022 +0000 (UTC) Info: stderr sent to /home/kraghavan/Projects/CL/Graph-Continual-Learning/Node_Classification/Cora/452237.error
+Tue Apr 19 05:48:56 2022 +0000 (UTC) 
+Tue Apr 19 06:15:26 2022 +0000 (UTC) Info: user delete requested with signal SIGTERM by user kraghavan

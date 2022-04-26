@@ -1,0 +1,114 @@
+Data(x=[2995, 2879], edge_index=[2, 16316], y=[2995])
+from the load dataset tensor([[0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.]])
+Dataset: Cora_mlFull():
+======================
+Number of graphs: 1
+Number of features: 2879
+Number of classes: 7
+selected 7 ids from 7
+GPU:0
+process      23874 uses     1783.000 MB GPU memory
+tensor([False, False, False,  ...,  True, False, False]) tensor([ True,  True,  True,  ..., False,  True,  True])
+Task: 000, Epoch: 500, Test Acc: 0.972,            Mem Test Acc: 0.972, Test F1: 0.972,            Mem Test F1: 0.972
+Task: 001, Epoch: 500, Test Acc: 0.922,            Mem Test Acc: 0.919, Test F1: 0.922,            Mem Test F1: 0.919
+Task: 002, Epoch: 500, Test Acc: 0.828,            Mem Test Acc: 0.841, Test F1: 0.828,            Mem Test F1: 0.841
+##########################################
+PM: 0.828, FM: 0.132, AP: 0.841, AF: 0.078
+##########################################
+(3,) (3,) (3,) (3,)
+GPU:0
+process      23874 uses     2111.000 MB GPU memory
+tensor([False, False, False,  ...,  True, False, False]) tensor([ True,  True,  True,  ..., False,  True,  True])
+Task: 000, Epoch: 500, Test Acc: 0.966,            Mem Test Acc: 0.966, Test F1: 0.966,            Mem Test F1: 0.966
+Task: 001, Epoch: 500, Test Acc: 0.911,            Mem Test Acc: 0.908, Test F1: 0.911,            Mem Test F1: 0.908
+Task: 002, Epoch: 500, Test Acc: 0.868,            Mem Test Acc: 0.852, Test F1: 0.868,            Mem Test F1: 0.852
+##########################################
+PM: 0.868, FM: 0.114, AP: 0.852, AF: 0.056
+##########################################
+(3,) (3,) (3,) (3,)
+GPU:0
+process      23874 uses     2111.000 MB GPU memory
+tensor([False, False, False,  ...,  True, False, False]) tensor([ True,  True,  True,  ..., False,  True,  True])
+Task: 000, Epoch: 500, Test Acc: 0.968,            Mem Test Acc: 0.968, Test F1: 0.968,            Mem Test F1: 0.968
+Task: 001, Epoch: 500, Test Acc: 0.936,            Mem Test Acc: 0.930, Test F1: 0.936,            Mem Test F1: 0.930
+Task: 002, Epoch: 500, Test Acc: 0.853,            Mem Test Acc: 0.844, Test F1: 0.853,            Mem Test F1: 0.844
+##########################################
+PM: 0.853, FM: 0.124, AP: 0.844, AF: 0.087
+##########################################
+(3,) (3,) (3,) (3,)
+GPU:0
+process      23874 uses     2111.000 MB GPU memory
+tensor([False, False, False,  ...,  True, False, False]) tensor([ True,  True,  True,  ..., False,  True,  True])
+Task: 000, Epoch: 500, Test Acc: 0.969,            Mem Test Acc: 0.969, Test F1: 0.969,            Mem Test F1: 0.969
+Task: 001, Epoch: 500, Test Acc: 0.915,            Mem Test Acc: 0.917, Test F1: 0.915,            Mem Test F1: 0.917
+Task: 002, Epoch: 500, Test Acc: 0.832,            Mem Test Acc: 0.854, Test F1: 0.832,            Mem Test F1: 0.854
+##########################################
+PM: 0.832, FM: 0.116, AP: 0.854, AF: 0.063
+##########################################
+(3,) (3,) (3,) (3,)
+GPU:0
+process      23874 uses     2111.000 MB GPU memory
+tensor([False, False, False,  ...,  True, False, False]) tensor([ True,  True,  True,  ..., False,  True,  True])
+Task: 000, Epoch: 500, Test Acc: 0.968,            Mem Test Acc: 0.968, Test F1: 0.968,            Mem Test F1: 0.968
+Task: 001, Epoch: 500, Test Acc: 0.925,            Mem Test Acc: 0.924, Test F1: 0.925,            Mem Test F1: 0.924
+Task: 002, Epoch: 500, Test Acc: 0.813,            Mem Test Acc: 0.847, Test F1: 0.813,            Mem Test F1: 0.847
+##########################################
+PM: 0.813, FM: 0.121, AP: 0.847, AF: 0.077
+##########################################
+(3,) (3,) (3,) (3,)
+GPU:0
+process      23874 uses     2111.000 MB GPU memory
+tensor([False, False, False,  ...,  True, False, False]) tensor([ True,  True,  True,  ..., False,  True,  True])
+Task: 000, Epoch: 500, Test Acc: 0.963,            Mem Test Acc: 0.963, Test F1: 0.963,            Mem Test F1: 0.963
+Task: 001, Epoch: 500, Test Acc: 0.932,            Mem Test Acc: 0.925, Test F1: 0.932,            Mem Test F1: 0.925
+Task: 002, Epoch: 500, Test Acc: 0.828,            Mem Test Acc: 0.856, Test F1: 0.828,            Mem Test F1: 0.856
+##########################################
+PM: 0.828, FM: 0.107, AP: 0.856, AF: 0.069
+##########################################
+(3,) (3,) (3,) (3,)
+GPU:0
+process      23874 uses     2111.000 MB GPU memory
+tensor([False, False, False,  ...,  True, False, False]) tensor([ True,  True,  True,  ..., False,  True,  True])
+Task: 000, Epoch: 500, Test Acc: 0.966,            Mem Test Acc: 0.966, Test F1: 0.966,            Mem Test F1: 0.966
+Task: 001, Epoch: 500, Test Acc: 0.926,            Mem Test Acc: 0.922, Test F1: 0.926,            Mem Test F1: 0.922
+Task: 002, Epoch: 500, Test Acc: 0.811,            Mem Test Acc: 0.851, Test F1: 0.811,            Mem Test F1: 0.851
+##########################################
+PM: 0.811, FM: 0.115, AP: 0.851, AF: 0.071
+##########################################
+(3,) (3,) (3,) (3,)
+GPU:0
+process      23874 uses     2111.000 MB GPU memory
+tensor([False, False, False,  ...,  True, False, False]) tensor([ True,  True,  True,  ..., False,  True,  True])
+Task: 000, Epoch: 500, Test Acc: 0.965,            Mem Test Acc: 0.965, Test F1: 0.965,            Mem Test F1: 0.965
+Task: 001, Epoch: 500, Test Acc: 0.901,            Mem Test Acc: 0.912, Test F1: 0.901,            Mem Test F1: 0.912
+Task: 002, Epoch: 500, Test Acc: 0.849,            Mem Test Acc: 0.848, Test F1: 0.849,            Mem Test F1: 0.848
+##########################################
+PM: 0.849, FM: 0.117, AP: 0.848, AF: 0.064
+##########################################
+(3,) (3,) (3,) (3,)
+GPU:0
+process      23874 uses     2111.000 MB GPU memory
+tensor([False, False, False,  ...,  True, False, False]) tensor([ True,  True,  True,  ..., False,  True,  True])
+Task: 000, Epoch: 500, Test Acc: 0.969,            Mem Test Acc: 0.969, Test F1: 0.969,            Mem Test F1: 0.969
+Task: 001, Epoch: 500, Test Acc: 0.912,            Mem Test Acc: 0.909, Test F1: 0.912,            Mem Test F1: 0.909
+Task: 002, Epoch: 500, Test Acc: 0.826,            Mem Test Acc: 0.838, Test F1: 0.826,            Mem Test F1: 0.838
+##########################################
+PM: 0.826, FM: 0.132, AP: 0.838, AF: 0.071
+##########################################
+(3,) (3,) (3,) (3,)
+GPU:0
+process      23874 uses     2111.000 MB GPU memory
+tensor([False, False, False,  ...,  True, False, False]) tensor([ True,  True,  True,  ..., False,  True,  True])
+Task: 000, Epoch: 500, Test Acc: 0.966,            Mem Test Acc: 0.966, Test F1: 0.966,            Mem Test F1: 0.966
+Task: 001, Epoch: 500, Test Acc: 0.921,            Mem Test Acc: 0.922, Test F1: 0.921,            Mem Test F1: 0.922
+Task: 002, Epoch: 500, Test Acc: 0.828,            Mem Test Acc: 0.857, Test F1: 0.828,            Mem Test F1: 0.857
+##########################################
+PM: 0.828, FM: 0.109, AP: 0.857, AF: 0.065
+##########################################
+(3,) (3,) (3,) (3,)
