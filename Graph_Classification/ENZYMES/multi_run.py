@@ -74,9 +74,9 @@ def Run_it(configuration: dict):
 
 
 from Graph_classification import *
-Run_it({'total_epoch': 1000, 'print_it':100, 'total_runs':2, 'decay':1e-4,'learning_Rate':1e-3,\
-        'hidden_channels':32, 'dropout':0.5, 'layers':3,\
-        'x_updates': 2,  'theta_updates':2,\
-        'factor': 1, 'x_lr': 1e-04,'th_lr':1e-05,\
+Run_it({'total_epoch': 15000, 'print_it': 1000, 'total_runs':2, 'decay':1e-10,'learning_Rate':1e-4,\
+        'hidden_channels':32, 'dropout':0.6, 'layers':5,\
+        'x_updates': 5,  'theta_updates':100,\
+        'factor': 1, 'x_lr': 0.0001,'th_lr':0.001,\
         'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
         'batchsize':16, 'total_updates': 1000, 'name_label':'ENZYMES', 'save_dir':'../ENZYMES/'})

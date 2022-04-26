@@ -5,6 +5,8 @@ sys.path.append('../../')
 from Lib import *
 from Node_Classification import *
 
+
+
 from torch.nn import Linear
 import torch.nn.functional as F
 from torch_geometric.nn import global_mean_pool
@@ -61,8 +63,7 @@ def Run_it(configuration: dict):
         criterion = torch.nn.CrossEntropyLoss(reduction='none')
         optimizer = torch.optim.Adam(model.parameters(), lr=configuration["learning_rate"],\
              weight_decay=configuration["decay"])
-
-    
+        print(torch.cuda. list_gpu_processes())
         ## the following is my development
         try:
             acc_one[i,:], acc_m[i,:], f1_one[i,:], f1_m[i,:] = run(name_label, epochs=total_epoch,\
@@ -91,9 +92,9 @@ def Run_it(configuration: dict):
 
 
 if __name__ == "__main__":
-    # We define a dictionnary for the default values
-    Run_it({
-       'hidden':8,\
+    # We define a dictionnary 
+    # for the default values
+    Run_it({'hidden':8,\
         'decay':1e-10,\
         "dropout":0.6,\
         "learning_rate": 1e-04,\
@@ -104,10 +105,10 @@ if __name__ == "__main__":
         'th_lr': 1e-07,\
         'batchsize':16,\
         'total_updates': 500,\
-        'epoch':500,\
-        'name_label':'CiteSeer',\
-        'save_dir':'../CiteSeer/ITL',\
-        'print_it':500,\
-        'total_runs':10,
-        'num_labels_task':2
-    })
+        'epoch':5000,\
+
+        'name_label':'cora_ML',\
+        'save_dir':'../Cora/ICL',\
+        'print_it':5,\
+        'total_runs':10,\
+        'num_labels_task':1})

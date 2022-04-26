@@ -19,9 +19,8 @@ class GCN(torch.nn.Module):
         x = self.conv1(x, edge_index)
         x = x.relu()
         for i in range(self.layers):
-            prev=x
             x = self.conv2(x, edge_index)
-            x = x.relu()+prev
+            x = x.relu()
         # 2. Readout layer
         x = global_mean_pool(x, batch)  # [batch_size, hidden_channels]
         # 3. Apply a final classifier
@@ -74,9 +73,9 @@ def Run_it(configuration: dict):
 
 
 from Graph_classification import *
-Run_it({'total_epoch': 10000, 'print_it':1000, 'total_runs':2, 'decay':1e-4,'learning_Rate':1e-4,\
-        'hidden_channels':32, 'dropout':0.5, 'layers':3,\
-        'x_updates': 10,  'theta_updates':10,\
+Run_it({'total_epoch': 150000, 'print_it': 10000, 'total_runs':10, 'decay':1e-10,'learning_Rate':1e-4,\
+        'hidden_channels':32, 'dropout':0.6, 'layers':3,\
+        'x_updates': 1,  'theta_updates':10,\
         'factor': 1, 'x_lr': 0.0001,'th_lr':0.001,\
         'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
-        'batchsize':16, 'total_updates': 5000, 'name_label':'PROTEINS', 'save_dir':'../PROTEINS/'})
+        'batchsize':16, 'total_updates': 500, 'name_label':'PROTEINS', 'save_dir':'../PROTEINS/'})
