@@ -51,6 +51,13 @@ def Run_it(configuration: dict):
                'factor': configuration['factor'], 'x_lr': configuration['x_lr'],'th_lr':configuration['th_lr'],\
                     'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
                     'batchsize':configuration['batchsize'], 'total_updates': configuration['total_updates']}
+    
+    
+    PM = np.zeros((total_runs,1))
+    FM = np.zeros((total_runs,1))
+    AP = np.zeros((total_runs,1))
+    AF = np.zeros((total_runs,1))
+    
     for i in range(total_runs):
         
         model = GCN(hidden_channels=configuration['hidden_channels'],\
@@ -67,8 +74,13 @@ def Run_it(configuration: dict):
         print_it=print_it, config=params,\
         model=model, criterion=criterion, optimizer=optimizer, dataset=dataset)
 
+    print("##########################################")
+    print(f'MEAN--PM: {np.mean(PM):.3f}, FM: {np.mean(FM):.3f}, AP: {np.mean(AP):.3f}, AF: {np.mean(AF):.3f}')
+    print(f'STD--PM: {np.std(PM):.3f}, FM: {np.std(FM):.3f}, AP: {np.std(AP):.3f}, AF: {np.std(AF):.3f}')
+    print("##########################################")
     plot_save(acc_m, acc_one, save_dir, name_label, total_epoch, print_it, total_runs, n_Tasks)
     plot_save(f1_m, f1_one, save_dir, name_label+'f1', total_epoch, print_it, total_runs, n_Tasks)
+
 
 
 

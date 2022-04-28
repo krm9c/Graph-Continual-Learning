@@ -78,4 +78,4 @@ def run(name_label, epochs, print_it, config, model,\
     accuracies_mem=np.array(accuracies_mem).reshape([-1])
     print(accuracies_one.shape, accuracies_mem.shape, F1_one.shape, F1_mem.shape)
     del model, criterion, optimizer, memory_train, memory_test, Total_loss, Gen_loss, For_loss
-    return accuracies_one, accuracies_mem,F1_one, F1_mem
+    return accuracies_one, accuracies_mem,F1_one, F1_mem, PM, FM, AP, AF 

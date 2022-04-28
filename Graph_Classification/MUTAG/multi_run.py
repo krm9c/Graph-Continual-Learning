@@ -48,12 +48,17 @@ def Run_it(configuration: dict):
     acc_m = np.zeros((total_runs,(((total_epoch//print_it)-1)*n_Tasks)))
     f1_one = np.zeros((total_runs,(((total_epoch//print_it)-1)*n_Tasks)))
     f1_m = np.zeros((total_runs,(((total_epoch//print_it)-1)*n_Tasks)))
+
+    PM = np.zeros((total_runs,1))
+    FM = np.zeros((total_runs,1))
+    AP = np.zeros((total_runs,1))
+    AF = np.zeros((total_runs,1))
+
     params= {'x_updates':configuration['x_updates'],  'theta_updates': configuration['theta_updates'],
                'factor': configuration['factor'], 'x_lr': configuration['x_lr'],'th_lr':configuration['th_lr'],\
                     'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
                     'batchsize':configuration['batchsize'], 'total_updates': configuration['total_updates']}
     for i in range(total_runs):
-        
         model = GCN(hidden_channels=configuration['hidden_channels'],\
         num_node_features= dataset.num_features,\
         num_classes=dataset.num_classes,seed=i,\
@@ -64,10 +69,14 @@ def Run_it(configuration: dict):
             lr=configuration['learning_Rate'], weight_decay=configuration['decay'])    
         
         ## the following is my development
-        acc_one[i,:], acc_m[i,:], f1_one[i,:], f1_m[i,:] =run(name_label, epochs=total_epoch,\
-        print_it=print_it, config=params,\
-        model=model, criterion=criterion, optimizer=optimizer, dataset=dataset)
+        acc_one[i,:], acc_m[i,:], f1_one[i,:], f1_m[i,:],\
+        PM[i,0], FM[i,0], AP[i,0], AF[i,0]  =run(name_label, epochs=total_epoch,\
+        print_it=print_it, config=params, model=model, criterion=criterion, optimizer=optimizer, dataset=dataset)
 
+    print("##########################################")
+    print(f'MEAN--PM: {np.mean(PM):.3f}, FM: {np.mean(FM):.3f}, AP: {np.mean(AP):.3f}, AF: {np.mean(AF):.3f}')
+    print(f'STD--PM: {np.std(PM):.3f}, FM: {np.std(FM):.3f}, AP: {np.std(AP):.3f}, AF: {np.std(AF):.3f}')
+    print("##########################################")
     plot_save(acc_m, acc_one, save_dir, name_label, total_epoch, print_it, total_runs, n_Tasks)
     plot_save(f1_m, f1_one, save_dir, name_label+'f1', total_epoch, print_it, total_runs, n_Tasks)
 
@@ -75,7 +84,7 @@ def Run_it(configuration: dict):
 
 
 from Graph_classification import *
-Run_it({'total_epoch': 15000, 'print_it': 1000, 'total_runs':10, 'decay':1e-10,'learning_Rate':1e-4,\
+Run_it({'total_epoch': 2000, 'print_it': 1000, 'total_runs':2, 'decay':1e-10,'learning_Rate':1e-4,\
         'hidden_channels':32, 'dropout':0.6, 'layers':5,\
         'x_updates': 5,  'theta_updates':100,\
         'factor': 1, 'x_lr': 0.0001,'th_lr':0.001,\
