@@ -23,17 +23,17 @@ args = parser.parse_args()
 
 ## MUTAG
 hps_dict = provide_hps('results_fi/filename_.csv', 0.80, n_params=20)
-acc_list=[ Run_it({'total_epoch': 3000, 'print_it': 100000000, 'total_runs':1,\
+acc_list=[ Run_it({'total_epoch': 1000, 'print_it': 100, 'total_runs':1,\
                 'decay':hps_dict[i]['decay'],\
                 'learning_Rate':hps_dict[i]['lr'],\
                 'hidden_channels':int(hps_dict[i]['hc']),'dropout':float(hps_dict[i]['dropout']),\
                 'layers':int(hps_dict[i]['n_lays']),\
                 'x_updates': int(hps_dict[i]['x_updates']),  'theta_updates': int(hps_dict[i]['th_updates']),\
-                'factor': 1, 'x_lr': 1e-06,'th_lr':1e-04,\
+                'factor': 0, 'x_lr': 1e-39,'th_lr':1e-39,\
                 'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
                 'batchsize':16, 'total_updates': int(hps_dict[i]['tot_updates']),\
-                'name_label':'MUTAG', 'save_dir':'../Results/mutag/',\
-                'prob':'graph_class','model_parse':args, 'full':0, 'model_tit': 'GCN' }) for i in range(len(hps_dict))]
+                'name_label':'MUTAG', 'save_dir':'../Results/mutag/switch_off_theta_X_',\
+                'prob':'graph_class','model_parse':args, 'full':0, 'model_tit': 'GCN' }) for i in range(1)]
 import matplotlib.pyplot as plt
 plt.hist(acc_list)
 np.savetxt('results_fi/acc_MUTAG_DH.csv', np.array(acc_list), delimiter=',')

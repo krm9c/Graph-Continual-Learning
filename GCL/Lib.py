@@ -8,7 +8,7 @@ from sklearn.metrics import f1_score
 import copy
 from torch.profiler import profile, record_function, ProfilerActivity
 import random
-
+from model import *
 import collections
 from queue import Empty
 import sys 
@@ -585,10 +585,7 @@ def runGraph(name_label, epochs, print_it, config, model,\
     import random
     memory_train=[]
     memory_test=[]
-    
-
-
-    #import torch.optim.lr_scheduler as lrs
+    import torch.optim.lr_scheduler as lrs
     # scheduler = lrs.ExponentialLR(optimizer, gamma=0.9)
     accuracies_mem = []
     accuracies_one=[]
@@ -603,24 +600,33 @@ def runGraph(name_label, epochs, print_it, config, model,\
         if config['full'] <1:
             # print("The task number", i)
             train_loader, test_loader, mem_train_loader, mem_test_loader, memory_train, memory_test = continuum_Graph_classification(dataset, memory_train, memory_test, batch_size=64, task_id=i)
-            for epoch in range(1,(epochs*i+1) ):
+            for epoch in range(1,(epochs*(i+1)) ):
                 Total,Gen,For=train_CL(model, criterion, optimizer, mem_train_loader, train_loader, task=i, graph=1, node=0, params=config)
                 Total_loss.append(Total)
                 Gen_loss.append(Gen)
                 For_loss.append(For)
-                if epoch%print_it==0:
+                if epoch%print_it==0 and epoch>print_it:
                     # scheduler.step()
                     # train_acc, train_F1 = test_GC(model, train_loader)
                     test_acc, test_F1 = test_GC(model, test_loader)
                     # mem_train_acc, mem_train_f1 = test_GC(model, mem_train_loader)
                     mem_test_acc, mem_test_f1 = test_GC(model, mem_test_loader)
                     # print(test_F1, mem_test_f1)
-                    
                     print(f'Task: {i:03d}, Epoch: {epoch:03d}, Test Acc: {test_acc:.3f},  Mem Test Acc: {mem_test_acc:.3f}, Test F1: {test_F1:.3f}, Mem Test F1: {mem_test_f1:.3f}')
+            scheduler.step()
+            # train_acc, train_F1 = test_GC(model, train_loader)
+            test_acc, test_F1 = test_GC(model, test_loader)
+            # mem_train_acc, mem_train_f1 = test_GC(model, mem_train_loader)
+            mem_test_acc, mem_test_f1 = test_GC(model, mem_test_loader)
+            # print(test_F1, mem_test_f1)
+            accuracies_mem.append(mem_test_acc)
+            accuracies_one.append(test_acc)
+            F1_mem.append(mem_test_f1)
+            F1_one.append(test_F1)
         else:
             dataset = dataset.shuffle()
             length = len(dataset)
-            print("what is length", length)
+            # print("what is length", length)
             train_dataset = dataset[:int(0.80*length)]
             test_dataset = dataset[int(0.80*length):]
             train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
@@ -633,42 +639,34 @@ def runGraph(name_label, epochs, print_it, config, model,\
                     loss.backward()  # Derive gradients.
                     optimizer.step()  # Update parameters based on gradients.
                     optimizer.zero_grad()  # Clear gradients.
-                if epoch%print_it==0:
+                if epoch%print_it==0 and epoch>print_it:
                     # scheduler.step()
                     train_acc, train_F1 = test_GC(model, train_loader)
                     test_acc, test_F1 = test_GC(model, test_loader)
                     mem_train_acc, mem_train_f1 = test_GC(model, train_loader)
                     mem_test_acc, mem_test_f1 = test_GC(model, test_loader)
                     # print(test_F1, mem_test_f1)
-
                     print(f'Task: {i:03d}, Epoch: {epoch:03d}, Test Acc: {test_acc:.3f},  Mem Test Acc: {mem_test_acc:.3f}, Test F1: {test_F1:.3f}, Mem Test F1: {mem_test_f1:.3f}')
-
+            
+            #  scheduler.step()
+            # train_acc, train_F1 = test_GC(model, train_loader)
+            test_acc, test_F1 = test_GC(model, test_loader)
+            # mem_train_acc, mem_train_f1 = test_GC(model, mem_train_loader)
+            mem_test_acc, mem_test_f1 = test_GC(model, mem_test_loader)
+            # print(test_F1, mem_test_f1)
             accuracies_mem.append(mem_test_acc)
             accuracies_one.append(test_acc)
             F1_mem.append(mem_test_f1)
             F1_one.append(test_F1)
             break
-        
 
-    # The metrics from ER paper
-    PM=test_F1
-    if i>0:
-        diff =[ abs(F1_mem[-1]-ele) for ele in F1_mem]
-        print(diff)
-        print(max(diff))
-        FM=max(diff)
-    else:
-        FM=F1_mem[i]
-    # The metric from catastrophic Forgetting paper
-    AP=mem_test_acc
-    if i>0:
-        AF=abs(accuracies_mem[i]-accuracies_mem[i-1])
-    else:
-        AF=accuracies_mem[i]
-    #After the task has been learnt
-    print("##########################################")
-    print(f'PM: {PM:.3f}, FM: {FM:.3f}, AP: {AP:.3f}, AF: {AF:.3f}')
-    print("##########################################")
+
+    PM, FM, AP, AF = metrics(accuracies_mem, F1_mem)
+    # #After the task has been learnt
+    if epoch>print_it:
+        print("##########################################")
+        print(f'PM: {PM:.3f}, FM: {FM:.3f}, AP: {AP:.3f}, AF: {AF:.3f}')
+        print("##########################################")
     import numpy as np
     F1_one=np.array(F1_one).reshape([-1])
     F1_mem=np.array(F1_mem).reshape([-1])
@@ -677,8 +675,34 @@ def runGraph(name_label, epochs, print_it, config, model,\
     print(accuracies_one.shape, accuracies_mem.shape, F1_one.shape, F1_mem.shape)
     del model, criterion, optimizer, memory_train, memory_test, Total_loss, Gen_loss, For_loss
     return accuracies_one, accuracies_mem,F1_one, F1_mem, PM, FM, AP, AF 
-    
-        
+
+
+def metrics(accuracy_mem, F1_mem):
+    # The metrics from ER paper
+    PM=round((sum(F1_mem)/len(F1_mem))*100,2)
+    if len(accuracy_mem)>0:
+        F1_shifted = F1_mem[:-1]
+        F1_shifted.insert(0,F1_mem[0])
+        diff = abs(np.subtract(F1_mem,F1_shifted))
+
+        FM=round(max(diff)*100,2)
+    else:
+        FM=F1_mem[-1]
+
+    # The metrics from ER paper
+    AP=round( (sum(accuracy_mem)/len(accuracy_mem)*100),2)
+    if len(accuracy_mem)>0:
+        F1_shifted = accuracy_mem[:-1]
+        F1_shifted.insert(0,accuracy_mem[0])
+        diff = abs(np.subtract(accuracy_mem,F1_shifted))
+        AF=round(max(diff)*100,2)
+    else:
+        AF=accuracy_mem[-1]
+    return PM, FM, AP, AF 
+
+
+      
+
 
 def load_corafull(dataset):
     # load corafull dataset
@@ -719,7 +743,7 @@ def runNode(name_label, epochs, print_it, config, model,\
     import random
     memory_train=[]
     memory_test=[]
-    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)
+    #scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)
     accuracies_mem = []
     accuracies_one=[]
     F1_mem = []
@@ -755,56 +779,45 @@ def runNode(name_label, epochs, print_it, config, model,\
         y=y.to(device)
         train_mask=train_mask.to(device)
 
-        # print("The sizes of things", (x.element_size()*x.nelement())/1024, (y.element_size()*y.nelement())/1024,\
-        #     (edge_index.element_size()*edge_index.nelement())/1024, (train_mask.element_size()*train_mask.nelement())/1024 )
-
         for epoch in range(epochs_T+1):
             # print(epoch)
             # print("I reached her e")
             train_loader= (x, edge_index, y, train_mask)
-            # print("2here")
-            # out =model(x, edge_index)[train_mask]
-            # print("3here")
-            # Total_loss = torch.mean(criterion(out, y[train_mask]))
-            # optimizer.zero_grad() 
-            # Total_loss.backward()  # Derive gradients.
-            # optimizer.step()  # Update parameters based on gradients.
-            train_CL( model, criterion, optimizer,\
-            memory_train, train_loader, task=id, \
-            graph = 0, node=1, params = { 'x_updates': config['x_updates'],\
-            'theta_updates': config['theta_updates'],\
-            'factor': config['factor'], 'x_lr': config['x_lr'],\
-            'th_lr':config['th_lr'],'device': device,\
-            'batchsize':8, 'total_updates': config['total_updates']})
+            if config['full'] <1:
+                train_CL( model, criterion, optimizer,\
+                memory_train, train_loader, task=id, \
+                graph = 0, node=1, params = { 'x_updates': config['x_updates'],\
+                'theta_updates': config['theta_updates'],\
+                'factor': config['factor'], 'x_lr': config['x_lr'],\
+                'th_lr':config['th_lr'],'device': device,\
+                'batchsize':8, 'total_updates': config['total_updates']})
+            else:
+                out =model(x, edge_index)[train_mask]
+                Total_loss = torch.mean(criterion(out, y[train_mask]))
+                optimizer.zero_grad() 
+                Total_loss.backward()  # Derive gradients.
+                optimizer.step()  # Update parameters based on gradients.
 
-        scheduler.step()
+
+        # scheduler.step()
         test_acc, test_F1 = test_NC(model, train_loader, [test_mask])
-        # print("idhar aa gaya")
         mem_test_acc, mem_test_f1 = test_NC(model, train_loader, memory_test)
-        print(f'Task: {id:03d}, Epoch: {epoch:03d}, Test Acc: {test_acc:.3f},\
-            Mem Test Acc: {mem_test_acc:.3f}, Test F1: {test_F1:.3f},\
-            Mem Test F1: {mem_test_f1:.3f}')
-
-
         accuracies_mem.append(mem_test_acc)
         accuracies_one.append(test_acc)
         F1_mem.append(mem_test_f1)
         F1_one.append(test_F1)
 
+        if epoch>print_it:    
+            print(f'Task: {id:03d}, Epoch: {epoch:03d}, Test Acc: {test_acc:.3f},\
+            Mem Test Acc: {mem_test_acc:.3f}, Test F1: {test_F1:.3f},\
+            Mem Test F1: {mem_test_f1:.3f}')
 
-    # The metrics from ER paper
-    PM=accuracies_one[-1]
-    diff =[ abs(F1_mem[-1]-ele) for ele in F1_mem]
-    # print(diff)
-    # print(max(diff))
-    FM=max(diff)
-    # The metric from catastrophic Forgetting paper
-    AP=accuracies_mem[-1]
-    AF=abs(accuracies_mem[id]-accuracies_mem[id-1])
+    PM, FM, AP, AF = metrics(accuracies_mem, F1_mem)
     #After the task has been learnt
-    print("##########################################")
-    print(f'PM: {PM:.3f}, FM: {FM:.3f}, AP: {AP:.3f}, AF: {AF:.3f}')
-    print("##########################################")
+    if epoch>print_it:
+        print("##########################################")
+        print(f'PM: {PM:.3f}, FM: {FM:.3f}, AP: {AP:.3f}, AF: {AF:.3f}')
+        print("##########################################")
     F1_one=np.array(F1_one).reshape([-1])
     F1_mem=np.array(F1_mem).reshape([-1])
     accuracies_one = np.array(accuracies_one).reshape([-1])
@@ -815,3 +828,110 @@ def runNode(name_label, epochs, print_it, config, model,\
 
 
 
+
+
+def Run_it(configuration: dict):
+    args=configuration['model_parse']
+    name_label=configuration['name_label']
+    save_dir=configuration['save_dir']
+    total_epoch=configuration['total_epoch']
+    print_it=configuration['print_it']
+    total_runs=configuration['total_runs']
+    dataset= load_data(name_label)
+
+    print(dataset)
+    # 2print("data is", dataset[0], dataset)
+
+    ## the following is my development
+    if configuration['prob'] == 'graph_class':
+        n_Tasks=dataset.num_classes
+        args.num_classes = dataset.num_classes
+        args.num_features = dataset.num_features
+        params= {'x_updates':configuration['x_updates'],  'theta_updates': configuration['theta_updates'],
+        'factor': configuration['factor'], 'x_lr': configuration['x_lr'],'th_lr':configuration['th_lr'],\
+        'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
+        'batchsize':configuration['batchsize'], 'full': configuration['full'], 'total_updates': configuration['total_updates']}
+    elif configuration['prob'] == 'node_class':
+        n_Tasks=dataset.num_classes//configuration['num_labels_task']
+        params = {'x_updates': configuration['x_updates'], 'n_Tasks':n_Tasks,\
+        'num_classes':dataset.num_classes,\
+        'num_labels_task':configuration['num_labels_task'], 'theta_updates': configuration['theta_updates'],\
+        'factor': configuration['factor'], 'x_lr': configuration['x_lr'],'th_lr':configuration['th_lr'],\
+        'device': torch.device("cuda" if torch.cuda.is_available() else "cpu"),\
+        'batchsize':configuration['batchsize'], 'full': configuration['full'],\
+        'total_updates': configuration['total_updates']} 
+
+    acc_one = np.zeros((total_runs,n_Tasks))
+    acc_m = np.zeros((total_runs,n_Tasks))
+    f1_one = np.zeros((total_runs,n_Tasks))
+    f1_m = np.zeros((total_runs,n_Tasks))
+    PM = np.zeros((total_runs,1))
+    FM = np.zeros((total_runs,1))
+    AP = np.zeros((total_runs,1))
+    AF = np.zeros((total_runs,1))
+    for i in range(total_runs):
+        if configuration['model_tit'] == 'GCN':
+            model = GCN_ours(hidden_channels=configuration['hidden_channels'],\
+            num_node_features= dataset.num_features,\
+            num_classes=dataset.num_classes,seed=i,\
+            dropout=configuration['dropout'],\
+            layers=configuration['layers']).to(params['device'])
+
+        elif configuration['model_tit'] == 'GAT':
+            model = GAT_ours(nfeat=dataset.num_node_features,\
+                    nclass=dataset.num_classes,\
+                    drop_rate=configuration['dropout'],\
+                    hidden=configuration['hidden'],\
+                    in_head=8,\
+                    out_head=1).to(params['device'])
+        
+        elif configuration['model_tit'] == 'HGS':
+            model = Model(args).to(params['device'])
+            
+        criterion = torch.nn.CrossEntropyLoss(reduction='none')
+        optimizer = torch.optim.Adam(model.parameters(),\
+            lr=configuration['learning_Rate'], weight_decay=configuration['decay'])    
+        
+        ## the following is my development
+        if configuration['prob'] == 'graph_class':
+            acc_one[i,:], acc_m[i,:], f1_one[i,:], f1_m[i,:],\
+            PM[i,0], FM[i,0], AP[i,0], AF[i,0]  =runGraph(name_label, epochs=total_epoch,\
+            print_it=print_it, config=params, model=model, criterion=criterion, optimizer=optimizer, dataset=dataset)
+
+
+        elif configuration['prob'] == 'node_class':
+            g, features, labels, train_mask, val_mask, test_mask = load_corafull(dataset)
+            datas= [Data(x=features, y=labels,edge_index=g,\
+                train_mask=train_mask, val_mask=val_mask, test_mask=test_mask)]
+
+            acc_one[i,:], acc_m[i,:], f1_one[i,:], f1_m[i,:],\
+            PM[i,0], FM[i,0], AP[i,0], AF[i,0]  =runNode(name_label, epochs=total_epoch,\
+            print_it=print_it, config=params, model=model, criterion=criterion, optimizer=optimizer, dataset=datas)
+
+
+    if total_epoch>print_it:
+        print("##################################################################################################")
+        print(f'MEAN--PM: {np.mean(PM):.3f}, FM: {np.mean(FM):.3f}, AP: {np.mean(AP):.3f}, AF: {np.mean(AF):.3f}')
+        print(f'STD--PM: {np.std(PM):.3f}, FM: {np.std(FM):.3f}, AP: {np.std(AP):.3f}, AF: {np.std(AF):.3f}')
+        print("##################################################################################################")
+        plot_save(acc_m, acc_one, save_dir, name_label, total_epoch, print_it, total_runs, n_Tasks)
+        plot_save(f1_m, f1_one, save_dir, name_label+'f1', total_epoch, print_it, total_runs, n_Tasks)
+    
+    return (100-AF[i,0])
+
+
+def provide_hps(filename, quantoo, n_params):
+    import numpy as np 
+    import pandas as pd
+    from sdv.tabular import GaussianCopula
+    df =pd.read_csv('results_fi/results.csv', delimiter=',', header=None)
+    header=df.values[0,:]
+    df =pd.read_csv(filename, delimiter=' ', header=None, names=header)
+    q_10 = np.quantile(df.objective.values, quantoo)
+    real_df = df.loc[df['objective'] > q_10].drop(columns=['elapsed_sec', 'duration', 'objective', 'id'])
+    model = GaussianCopula()
+    model.fit(real_df)
+    new_data = model.sample(num_rows= n_params)
+    return new_data.to_dict(orient='records')
+
+    

@@ -51,7 +51,7 @@ done
 ssh -tt $head_node_ip "source $INIT_SCRIPT && ray status"
 
 # Run the search
-ssh -tt $head_node_ip "source $INIT_SCRIPT && cd $EXP_DIR && python deephyper.py"
+ssh -tt $head_node_ip "source $INIT_SCRIPT && cd $EXP_DIR && python deephyper_Proteins.py"
 
 # Stop de Ray cluster
 ssh -tt $head_node_ip "source $INIT_SCRIPT && ray stop"

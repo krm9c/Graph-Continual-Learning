@@ -27,8 +27,8 @@ parser.add_argument('--lamb', type=float, default=1.0, help='trade-off parameter
 args = parser.parse_args()
 
 ## MUTAG
-hps_dict = provide_hps('filename_protein.csv', 0.80, n_params=10)
-acc_list=[ Run_it({'total_epoch': 500, 'print_it': 100000000, 'total_runs':1,\
+hps_dict = provide_hps('results_fi/filename_protein.csv', 0.80, n_params=20)
+acc_list=[ Run_it({'total_epoch': 5000, 'print_it': 100000000, 'total_runs':1,\
                 'decay':hps_dict[i]['decay'],\
                 'learning_Rate':hps_dict[i]['lr'],\
                 'hidden_channels':int(hps_dict[i]['hc']),'dropout':float(hps_dict[i]['dropout']),\
